@@ -1,0 +1,7 @@
+Utilisateurs : /users
+    POST (login) : /users/login => retourne un token
+    GET : /users/:id
+    POST : /users
+    PUT : /users/:id
+    DELETE : /users/:id
+    PATCH : /users/:id
