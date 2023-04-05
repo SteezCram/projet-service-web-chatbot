@@ -21,7 +21,7 @@
                         </nuxt-link>
                     </li>
 
-                    <p class="px-2">/</p>
+                    <p class="px-2">|</p>
 
                     <li class="hover:text-gray-200">
                         <nuxt-link to="/signup">

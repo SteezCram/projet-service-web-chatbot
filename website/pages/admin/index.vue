@@ -1,5 +1,14 @@
 <template>
-    <section class="h-full">
+    <container>
+        <div class="flex flex-row items-center">
+            <header-1>Bots</header-1>
+
+            <btn-primary @click="$router.push('/admin/bots/add')" class="ml-auto w-auto">
+                <i class="icon icon-plus"></i>
+                Ajouter un bot
+            </btn-primary>
+        </div>
+
         <article class="rounded bg-gray-100 dark:bg-gray-900" v-for="x in bots">
             <div class="flex flex-row items-center p-2">
                 <img class="rounded mr-2 h-8 w-8" :src="x.image" :alt="x.name"/>
@@ -15,7 +24,7 @@
                 </button>
             </div>
         </article>
-    </section>
+    </container>
 </template>
 
 <script>
