@@ -1,5 +1,5 @@
 <template>
-    <main class="w-screen h-screen bg-white dark:bg-black">
+    <div class="w-screen h-screen bg-white dark:bg-black">
         <header class="w-screen h-16 p-4 bg-teal-500 flex flex-row items-center text-white">
             <nuxt-link to="/">
                 <img class="w-8 h-8 mr-4" src="/favicon.ico">
@@ -10,14 +10,14 @@
                     <li class="mr-auto hover:text-gray-200">
                         <nuxt-link to="/">
                             <i class="icon icon-home1"></i>
-                            Home
+                            Accueil
                         </nuxt-link>
                     </li>
 
                     <li class="hover:text-gray-200">
                         <nuxt-link to="/login">
                             <i class="icon icon-user"></i>
-                            Login
+                            Connexion
                         </nuxt-link>
                     </li>
 
@@ -26,13 +26,15 @@
                     <li class="hover:text-gray-200">
                         <nuxt-link to="/signup">
                             <i class="icon icon-user-plus"></i>
-                            Signup
+                            Créer un compte
                         </nuxt-link>
                     </li>
                 </ul>
             </nav>
         </header>
 
-        <slot></slot>
-    </main>
+        <main style="height: calc(100% - 64px);">
+            <slot></slot>
+        </main>
+    </div>
 </template>
