@@ -59,3 +59,14 @@ module.exports.createUserAccount = async function (email, hashedPassword) {
     return false
   }
 }
+
+module.exports.getBots = async function () {
+  let result
+  try {
+    result = await database.get(`SELECT * FROM chatbot_bot`)
+    //console.log(result)
+  } catch (err) {
+    console.log(err)
+  }
+  return result
+}

@@ -1,6 +1,7 @@
 const PORT_SERVER = 3001
 
 const userAccount = require('./models/userAccount')
+const botManager = require('./models/botManager')
 
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -75,6 +76,15 @@ app.post('/users/login', async (req, res) => {
   }
 })
 
+app.get('/bots', async (req, res) => {
+  try {
+    let bots = await botManager.getAll()
+    console.log(bots)
+    if (bots) {
+      res.status(200).send(bots)
+    } else {
+      res.sendStatus(409)
+    }
   } catch (err) {
     console.log(`Error ${err} thrown`)
     res.status(404).send('NOT FOUND')
