@@ -7,6 +7,9 @@ const bodyParser = require('body-parser')
 
 const app = express()
 
+app.use(require('cors')({
+  origin: '*',
+}))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
