@@ -45,10 +45,10 @@
                     </li>
 
                     <li v-if="logged" class="hover:text-gray-200">
-                        <btn-primary @click="disconnect">
+                        <btn-link @click="disconnect">
                             <i class="icon icon-logout"></i>
-                            Créer un compte
-                        </btn-primary>
+                            Se déconnecter
+                        </btn-link>
                     </li>
                 </ul>
             </nav>
