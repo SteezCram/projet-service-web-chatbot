@@ -79,7 +79,6 @@ app.post('/users/login', async (req, res) => {
 app.get('/bots', async (req, res) => {
   try {
     let bots = await botManager.getAll()
-    console.log(bots)
     if (bots) {
       res.status(200).send(bots)
     } else {
