@@ -10,4 +10,7 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
+    routeRules: {
+        '/*': { cors: true, }
+    }
 })

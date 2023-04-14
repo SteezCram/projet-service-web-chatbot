@@ -1,5 +1,5 @@
 <template>
-    <a :href="link" class="font-medium text-primary-500 hover:underline hover:text-primary-600">
+    <a @click="$emit('click', $event)" :href="link" class="font-medium text-primary-500 hover:underline hover:text-primary-600">
         <slot></slot>
     </a>
 </template>

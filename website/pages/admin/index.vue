@@ -3,7 +3,7 @@
         <div class="flex flex-row items-center">
             <header-1>Bots</header-1>
 
-            <btn-primary @click="$router.push('/admin/bots/add')" class="ml-auto w-auto">
+            <btn-primary class="ml-auto !w-auto" @click="$router.push('/admin/bots/add')">
                 <i class="icon icon-plus"></i>
                 Ajouter un bot
             </btn-primary>
@@ -18,10 +18,10 @@
             <p>{{ x.description }}</p>
 
             <div class="bg-gray-200 dark:bg-gray-800">
-                <button class="bg-primary-600">
+                <btn-primary class="bg-primary-600">
                     <i class="icon icon-pencil"></i>
                     Modifier
-                </button>
+                </btn-primary>
             </div>
         </article>
     </container>
@@ -39,7 +39,7 @@ export default
 
     async mounted()
     {
-        const response = await this.$fetch('http://localhost:3001/bots');
+        const response = await $fetch('http://localhost:3001/bots');
 
         this.bots = await response.json();
     }

@@ -28,7 +28,7 @@
                         </btn-primary>
                         
                         <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                            Vous avez déjà un compte ? <btn-link>Créer un compte</btn-link>
+                            Vous avez déjà un compte ? <btn-link link="/login">Créer un compte</btn-link>
                         </p>
                     </form>
                 </div>
