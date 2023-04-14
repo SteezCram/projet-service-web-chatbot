@@ -7,7 +7,7 @@
                         Connectez-vous à votre compte
                     </header-3>
 
-                    <form class="space-y-4 md:space-y-6" action="#">
+                    <form class="space-y-4 md:space-y-6" action="#" @submit.prevent="login($event)">
                         <div>
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Votre email</label>
                             <input v-model="email" type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="">
@@ -18,7 +18,7 @@
                             <input v-model="password" type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
                         </div>
 
-                        <btn-primary @click="login($event)">
+                        <btn-primary ref="submitButton">
                             Se connecter
                         </btn-primary>
                         
@@ -47,17 +47,20 @@ export default
     {
         async login(event)
         {
-            event.preventDefault();
-            event.target.disabled = true;
+            this.$refs.submitButton.disabled = true;
+
+            if (this.email === '' || this.password === '')
+            {
+                this.$refs.submitButton.disabled = false;
+                alert('Please fill all the fields.');
+
+                return;
+            }
 
             try
             {
-                const response = await $fetch('http://localhost:3001/users/login', {
+                const response = await fetch('http://localhost:3001/users/login', {
                     method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Access-Control-Allow-Origin': '*'
-                    },
                     body: {
                         email: this.email,
                         password: this.password,
@@ -65,13 +68,31 @@ export default
                 });
 
                 console.log(response)
+
+                if (!response.ok)
+                {
+                    this.$refs.submitButton.disabled = false;
+                    alert('Internal error.');
+
+                    return;
+                }
+
+                const data = await response.json();
+                sessionStorage.setItem('logged', true);
+                sessionStorage.setItem('isAdmin', data.isAdmin ? true : false);
+
+                if (data.isAdmin) {
+                    this.$router.push('/admin');
+                }
+                else this.$router.push('/dashboard');
             }
             catch (error)
             {
-                console.log(error)
+                alert('Internal error.');
+                console.log(error);
             }
 
-            event.target.disabled = false;
+            this.$refs.submitButton.disabled = false;
         }
     }
 }
