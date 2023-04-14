@@ -42,24 +42,22 @@ app.post('/users', (req, res) => {
   try {
     const email = req.body.email
     const password = req.body.password
-
     /*
 			TODO: User database interface to authenticate login requests
 		*/
+    res.sendStatus(200)
   } catch (err) {
     console.log(`Error ${err} thrown`)
     res.status(404).send('NOT FOUND')
   }
 })
 
-app.post('/users/login', (req, res) => {
+app.post('/users/login', async (req, res) => {
   try {
     const email = req.body.email
     const password = req.body.password
-
-    /*
-			TODO: User database interface to authenticate login requests
-		*/
+    let goodLogin = await userAccount.loginAccount(email, password)
+    res.status(200).send({response:goodLogin})
   } catch (err) {
     console.log(`Error ${err} thrown`)
     res.status(404).send('NOT FOUND')

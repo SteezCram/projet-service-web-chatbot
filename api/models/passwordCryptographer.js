@@ -6,7 +6,14 @@ module.exports.hashPassword = async function (plainPassword) {
   return hashedPassword
 }
 
-module.exports.testPassword = async function (plainPassword, hashedPassword) {
-  const res = await bcrypt.compare(plainPassword, hashedPassword)
-  return res
+module.exports.comparePlainHashed = async function (plainPassword, hashedPassword) {
+  let match = false
+  try {
+    match = await bcrypt.compare(plainPassword, hashedPassword)
+  } catch ( err ) {
+    console.error(err)
+    return false
+  }
+  console.log(match)
+  return match
 }

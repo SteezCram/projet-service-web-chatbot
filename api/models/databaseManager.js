@@ -24,6 +24,19 @@ module.exports.getUser = async function (email) {
   return result
 }
 
+module.exports.getHashedPassword = async function (email) {
+  let hashedPassword
+  try {
+    const result = await database.get(`SELECT chatbot_user.password FROM chatbot_user WHERE chatbot_user.email = '${email}'`)
+    if (result) {
+      hashedPassword = result.password
+    }
+  } catch (err) {
+    console.log(err)
+  }
+  return hashedPassword
+}
+
 module.exports.createUserAccount = async function (email, hashedPassword) {
   try {
     await database.exec(`INSERT INTO chatbot_user (email, password) VALUES ('${email}', '${hashedPassword}')`)

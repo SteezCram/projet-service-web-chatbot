@@ -8,14 +8,15 @@ module.exports.createAccount = async function (email, plainPassword) {
   let res
   try {
     const dbRequest = await databaseManager.getUser(email)
+    console.log(dbRequest)
     if (dbRequest) {
       res = false
       throw 'Email already in database'
     }
     const hashedPassword = passwordCryptographer.hashPassword(plainPassword)
 
-    const dbExecution = await databaseManager.createUserAccount(email, hashedPassword)
-    res = dbExecution
+    //const dbExecution = await databaseManager.createUserAccount(email, hashedPassword)
+    //res = dbExecution
   } catch (err) {
     console.error(err)
   }
@@ -23,5 +24,16 @@ module.exports.createAccount = async function (email, plainPassword) {
 }
 
 module.exports.loginAccount = async function (email, plainPassword) {
-
+  try {
+    const hashedPassword = await databaseManager.getHashedPassword(email)
+    if (!hashedPassword) {
+      return 1
+    }
+    if  (!await passwordCryptographer.comparePlainHashed(plainPassword, hashedPassword)) {
+      return 2
+    }
+    return 0
+  } catch (err) {
+    console.error(err)
+  }
 }
