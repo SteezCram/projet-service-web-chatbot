@@ -43,6 +43,13 @@
                             Créer un compte
                         </nuxt-link>
                     </li>
+
+                    <li v-if="logged" class="hover:text-gray-200">
+                        <btn-primary @click="disconnect">
+                            <i class="icon icon-logout"></i>
+                            Créer un compte
+                        </btn-primary>
+                    </li>
                 </ul>
             </nav>
         </header>

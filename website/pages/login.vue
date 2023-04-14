@@ -81,10 +81,7 @@ export default
                 sessionStorage.setItem('logged', true);
                 sessionStorage.setItem('isAdmin', data.isAdmin ? true : false);
 
-                if (data.isAdmin) {
-                    this.$router.push('/admin');
-                }
-                else this.$router.push('/dashboard');
+                if (data.isAdmin) this.$router.push('/admin'); else this.$router.push('/dashboard');
             }
             catch (error)
             {
