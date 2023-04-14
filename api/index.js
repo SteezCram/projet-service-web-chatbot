@@ -62,8 +62,19 @@ app.post('/users/login', async (req, res) => {
   try {
     const email = req.body.email
     const password = req.body.password
-    let goodLogin = await userAccount.loginAccount(email, password)
-    res.status(200).send({response:goodLogin})
+    const goodLogin = await userAccount.loginAccount(email, password)
+    let isAdmin = false
+    if (goodLogin==0) {
+      isAdmin = await userAccount.isAdmin(email)
+      console.log(isAdmin)
+    }
+    res.status(200).send({response:goodLogin, isAdmin:isAdmin})
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.status(404).send('NOT FOUND')
+  }
+})
+
   } catch (err) {
     console.log(`Error ${err} thrown`)
     res.status(404).send('NOT FOUND')

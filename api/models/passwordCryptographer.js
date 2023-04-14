@@ -14,6 +14,5 @@ module.exports.comparePlainHashed = async function (plainPassword, hashedPasswor
     console.error(err)
     return false
   }
-  console.log(match)
   return match
 }

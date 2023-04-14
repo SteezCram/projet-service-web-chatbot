@@ -35,3 +35,16 @@ module.exports.loginAccount = async function (email, plainPassword) {
     console.error(err)
   }
 }
+
+module.exports.isAdmin = async function (email) {
+  try {
+    const isAdmin = await databaseManager.getAdminStatus(email)
+    if (isAdmin == 1) {
+      return true
+    } else {
+      return false
+    }
+  } catch ( err ) {
+
+  }
+}
