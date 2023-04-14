@@ -41,14 +41,17 @@ app.get('/users/:id', (req, res) => {
   }
 })
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
   try {
     const email = req.body.email
     const password = req.body.password
-    /*
-			TODO: User database interface to authenticate login requests
-		*/
-    res.sendStatus(200)
+    let goodCreation = await userAccount.createAccount(email, password)
+    if (goodCreation) {
+      res.sendStatus(201)
+    } else {
+      res.sendStatus(409)
+    }
+    
   } catch (err) {
     console.log(`Error ${err} thrown`)
     res.status(404).send('NOT FOUND')
