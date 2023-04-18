@@ -11,7 +11,7 @@ const app = express()
 app.use(require('cors')({
   origin: '*',
 }))
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
@@ -44,6 +44,7 @@ app.get('/users/:id', (req, res) => {
 
 app.post('/users', async (req, res) => {
   try {
+    console.log(req.body)
     const email = req.body.email
     const password = req.body.password
     let goodCreation = await userAccount.createAccount(email, password)
@@ -67,7 +68,6 @@ app.post('/users/login', async (req, res) => {
     let isAdmin = false
     if (goodLogin==0) {
       isAdmin = await userAccount.isAdmin(email)
-      console.log(isAdmin)
     }
     res.status(200).send({response:goodLogin, isAdmin:isAdmin})
   } catch (err) {

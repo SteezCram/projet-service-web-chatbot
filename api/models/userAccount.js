@@ -8,7 +8,7 @@ module.exports.createAccount = async function (email, plainPassword) {
   let res
   try {
     const dbRequest = await databaseManager.getUser(email)
-    console.log(dbRequest)
+    //console.log(dbRequest)
     if (dbRequest) {
       res = false
       //throw 'Email already in database'
