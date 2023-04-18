@@ -90,6 +90,25 @@ app.get('/bots', async (req, res) => {
   }
 })
 
+app.post('/bots', async (req, res) => {
+  try {
+    const botData = {
+      name: req.body.name,
+      description: req.body.description,
+      script: req.body.script,
+      image: req.body.image
+    }
+    newBotId = await botManager.createBot(botData)
+    if (!newBotId) {
+      throw "Couldn't create new bot"
+    }
+    res.status(200).send({id:newBotId})
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.status(404).send('NOT FOUND')
+  }
+})
+
 function isInt (value) {
   const x = parseFloat(value)
   return !isNaN(value) && (x | 0) === x
