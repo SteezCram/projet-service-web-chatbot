@@ -43,10 +43,21 @@ export default
     },
 
 
+    async mounted()
+    {
+        const logged = sessionStorage.getItem('logged');
+        const isAdmin = sessionStorage.getItem('isAdmin');
+
+        if (logged !== null)
+            if (isAdmin) this.$router.push('/admin'); else this.$router.push('/dashboard');
+    },
+
+
     methods:
     {
         async login(event)
         {
+            event.preventDefault();
             this.$refs.submitButton.disabled = true;
 
             if (this.email === '' || this.password === '')
@@ -67,7 +78,7 @@ export default
                     }
                 });
 
-                console.log(response)
+                console.log(response);
 
                 if (!response.ok)
                 {
@@ -81,7 +92,8 @@ export default
                 sessionStorage.setItem('logged', true);
                 sessionStorage.setItem('isAdmin', data.isAdmin ? true : false);
 
-                if (data.isAdmin) this.$router.push('/admin'); else this.$router.push('/dashboard');
+                location.reload();
+                return;
             }
             catch (error)
             {

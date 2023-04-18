@@ -7,7 +7,7 @@
                         Créer un compte
                     </header-3>
 
-                    <form class="space-y-4 md:space-y-6" action="#">
+                    <form @submit="signup($event)" class="space-y-4 md:space-y-6" action="#">
                         <div>
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Votre email</label>
                             <input v-model="email" type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="">
@@ -20,10 +20,10 @@
 
                         <div>
                             <label for="verifyPassword" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vérification du mot de passe</label>
-                            <input v-model="verifyPassword" type="verifyPassword" name="verifyPassword" id="verifyPassword" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
+                            <input v-model="verifyPassword" type="password" name="verifyPassword" id="verifyPassword" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
                         </div>
 
-                        <btn-primary @click="signup($event)">
+                        <btn-primary ref="submitButton">
                             Créer un compte
                         </btn-primary>
                         
@@ -48,17 +48,23 @@ export default
         }
     },
 
+    async mounted()
+    {
+        const logged = sessionStorage.getItem('logged');
+        if (logged !== null) this.$router.push('/dashboard');
+    },
+
 
     methods:
     {
         async signup(event)
         {
             event.preventDefault();
-            event.target.disabled = true;
+            this.$refs.submitButton.disabled = true;
 
             try
             {
-                const response = await this.$fetch('http://localhost:3001/users', {
+                const response = await fetch('http://localhost:3001/users', {
                     method: 'POST',
                     body: {
                         email: this.email,
@@ -66,14 +72,26 @@ export default
                     }
                 });
 
-                console.log(response)
+                if (!response.ok) {
+                    alert('The account already exists.');
+                    this.$refs.submitButton.disabled = false;
+                    return;
+                }
+
+                console.log(response);
+
+                sessionStorage.setItem('logged', true);
+
+                location.reload();
+                return;
             }
             catch (error)
             {
-                console.log(error)
+                alert('Internal error.');
+                console.log(error);
             }
 
-            event.target.disabled = false;
+            this.$refs.submitButton.disabled = false;
         }
     }
 }
