@@ -8,21 +8,21 @@
             <nav class="w-full">
                 <ul class="flex flex-row font-semibold">
                     <li class="mr-2 hover:text-gray-200">
-                        <nuxt-link to="/dashboard">
+                        <nuxt-link to="/">
                             <i class="icon icon-home1"></i>
                             Accueil
                         </nuxt-link>
                     </li>
 
-                    <li class="mr-2 hover:text-gray-200">
-                        <nuxt-link to="/admin">
+                    <li v-if="logged" class="mr-2 hover:text-gray-200">
+                        <nuxt-link to="/dashboard">
                             <i class="icon icon-dashboard"></i>
                             Dashboard
                         </nuxt-link>
                     </li>
 
-                    <li v-if="isAdmin !== 'false'" class="hover:text-gray-200">
-                        <nuxt-link to="/">
+                    <li v-if="isAdmin" class="hover:text-gray-200">
+                        <nuxt-link to="/admin">
                             <i class="icon icon-settings1"></i>
                             Admin
                         </nuxt-link>
@@ -44,11 +44,11 @@
                         </nuxt-link>
                     </li>
 
-                    <li v-if="logged" class="hover:text-gray-200">
-                        <btn-link @click="disconnect">
+                    <li v-if="logged" class="ml-auto hover:text-gray-200">
+                        <nuxt-link @click="disconnect" to="#">
                             <i class="icon icon-logout"></i>
                             Se déconnecter
-                        </btn-link>
+                        </nuxt-link>
                     </li>
                 </ul>
             </nav>
@@ -72,10 +72,18 @@ export default {
     mounted() {
         this.logged = sessionStorage.getItem('logged');
         this.isAdmin = sessionStorage.getItem('isAdmin');
+    },
 
-        if (this.isAdmin)
-            console.log('is admin');
-        console.log(this.isAdmin, this.logged);
+    methods: {
+        disconnect() {
+            sessionStorage.removeItem('logged');
+            sessionStorage.removeItem('isAdmin');
+
+            this.logged = false;
+            this.isAdmin = false;
+
+            this.$router.replace('/');
+        }
     }
 }
 </script>
