@@ -1,7 +1,7 @@
 const databaseManager = require('./databaseManager')
 const passwordCryptographer = require('./passwordCryptographer')
 
-module.exports.createAccount = async function (email, plainPassword) {
+module.exports.createAccount = async function (email, plainPassword, nickname) {
   // TODO: verify email is valid
 
   // Verify provided email is not in the database
@@ -14,7 +14,7 @@ module.exports.createAccount = async function (email, plainPassword) {
       //throw 'Email already in database'
     }
     const hashedPassword = await passwordCryptographer.hashPassword(plainPassword)
-    res = await databaseManager.createUserAccount(email, hashedPassword)
+    res = await databaseManager.createUserAccount(email, hashedPassword, nickname)
   } catch (err) {
     console.error(err)
   }

@@ -47,7 +47,8 @@ app.post('/users', async (req, res) => {
     console.log(req.body)
     const email = req.body.email
     const password = req.body.password
-    let goodCreation = await userAccount.createAccount(email, password)
+    const nickname = req.body.nickname
+    let goodCreation = await userAccount.createAccount(email, password, nickname)
     if (goodCreation) {
       res.sendStatus(201)
     } else {
