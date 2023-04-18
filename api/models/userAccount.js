@@ -25,12 +25,12 @@ module.exports.loginAccount = async function (email, plainPassword) {
   try {
     const hashedPassword = await databaseManager.getHashedPassword(email)
     if (!hashedPassword) {
-      return 1
+      return undefined
     }
     if  (!await passwordCryptographer.comparePlainHashed(plainPassword, hashedPassword)) {
-      return 2
+      return undefined
     }
-    return 0
+    return await databaseManager.getUser(email)
   } catch (err) {
     console.error(err)
   }

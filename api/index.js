@@ -64,12 +64,13 @@ app.post('/users/login', async (req, res) => {
   try {
     const email = req.body.email
     const password = req.body.password
-    const goodLogin = await userAccount.loginAccount(email, password)
-    let isAdmin = false
-    if (goodLogin==0) {
-      isAdmin = await userAccount.isAdmin(email)
+    const userInformation = await userAccount.loginAccount(email, password)
+    let isAdmin, nickname
+    if (userInformation) {
+      isAdmin = userInformation.isAdmin
+      nickname = userInformation.nickname
     }
-    res.status(200).send({response:goodLogin, isAdmin:isAdmin})
+    res.status(200).send({email:email, isAdmin:isAdmin, nickname:nickname})
   } catch (err) {
     console.log(`Error ${err} thrown`)
     res.status(404).send('NOT FOUND')
