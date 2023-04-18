@@ -79,3 +79,32 @@ module.exports.getBot = async function (id) {
   }
   return result
 }
+
+module.exports.createBot = async function (name, description, script, image) {
+  let res
+  try {
+    let fields = "name";
+    let values = `'${name}'`;
+    const separator = ", "
+
+    if (description){
+      fields += separator + "description"
+      values += separator + `'${description}'`
+    }
+    if (script){
+      fields += separator + "script"
+      values += separator + `'${script}'`
+    }
+    if (image){
+      fields += separator + "image"
+      values += separator + `'${image}'`
+    }
+    const sqlRequest = `INSERT INTO chatbot_bot (${fields}) VALUES (${values})`
+    console.log(sqlRequest)
+    const result = await database.run(sqlRequest)
+    res = result.lastID
+  } catch (err) {
+    console.error(err)
+  }
+  return res
+}
