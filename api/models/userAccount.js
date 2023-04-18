@@ -13,7 +13,7 @@ module.exports.createAccount = async function (email, plainPassword) {
       res = false
       //throw 'Email already in database'
     }
-    const hashedPassword = passwordCryptographer.hashPassword(plainPassword)
+    const hashedPassword = await passwordCryptographer.hashPassword(plainPassword)
     res = await databaseManager.createUserAccount(email, hashedPassword)
   } catch (err) {
     console.error(err)
