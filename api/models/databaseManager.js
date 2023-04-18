@@ -69,3 +69,13 @@ module.exports.getBots = async function () {
   }
   return result
 }
+
+module.exports.getBot = async function (id) {
+  let result
+  try {
+    result = await database.all(`SELECT * FROM chatbot_bot WHERE id=${id}`)
+  } catch (err) {
+    console.log(err)
+  }
+  return result
+}
