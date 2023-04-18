@@ -3,7 +3,7 @@
         <section style="height: calc(100% - 57.6px);" class="pb-5 overflow-y-auto">
             <container class="flex flex-col">
                 <div class="flex flex-row">
-                    <img class="w-10 h-10 rounded-full mr-2" :src="bot_avatar">
+                    <img class="w-10 h-10 rounded-full mr-2" :src="bot_image">
 
                     <article class="max-w-sm">
                         <header-4>{{ bot_name }}</header-4>
@@ -13,15 +13,15 @@
 
                 <div class="flex flex-row mt-2 ml-auto">
                     <article class="max-w-sm">
-                        <header-4 class="text-right">{{ user_name }}</header-4>
+                        <header-4 class="text-right">{{ user_nickname }}</header-4>
                         <p class="text-justify">Salut, bien et toi ?</p>
                     </article>
 
-                    <img class="w-10 h-10 rounded-full ml-2" :src="user_avatar">
+                    <img class="w-10 h-10 rounded-full ml-2" :src="user_image">
                 </div>
 
                 <div class="flex flex-row">
-                    <img class="w-10 h-10 rounded-full mr-2" :src="bot_avatar">
+                    <img class="w-10 h-10 rounded-full mr-2" :src="bot_image">
 
                     <article class="max-w-sm">
                         <header-4>{{ bot_name }}</header-4>
@@ -31,7 +31,7 @@
 
                 <div class="flex flex-row mt-2 ml-auto">
                     <article class="max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-                        <header-4 class="text-right">{{ user_name }}</header-4>
+                        <header-4 class="text-right">{{ user_nickname }}</header-4>
                         
                         <p class="text-justify">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
@@ -58,7 +58,7 @@
                         </p>
                     </article>
 
-                    <img class="w-10 h-10 rounded-full ml-2" :src="user_avatar">
+                    <img class="w-10 h-10 rounded-full ml-2" :src="user_image">
                 </div>          
             </container>
         </section>
@@ -96,10 +96,10 @@ export default
     data() {
         return {
             bot_name: 'Jackie',
-            bot_avatar: 'https://api.dicebear.com/6.x/bottts/svg?seed=jackie',
+            bot_image: 'https://api.dicebear.com/6.x/bottts/svg?seed=jackie',
 
-            user_name: 'tcroizet',
-            user_avatar: 'https://api.dicebear.com/6.x/bottts/svg?seed=tcroizet@enssat.fr'
+            user_nickname: 'Steez',
+            user_image: 'https://api.dicebear.com/6.x/bottts/svg?seed=tcroizet@enssat.fr'
         }
     },
 
