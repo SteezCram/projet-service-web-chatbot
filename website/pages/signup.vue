@@ -63,12 +63,18 @@ export default
 
             try
             {
+                console.log(this.email, this.password, this.verifyPassword)
+
                 const response = await fetch('http://localhost:3001/users', {
                     method: 'POST',
-                    body: {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
                         email: this.email,
                         password: this.password,
-                    }
+                    }),
                 });
 
                 if (!response.ok) {

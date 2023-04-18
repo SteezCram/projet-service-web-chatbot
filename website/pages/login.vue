@@ -71,10 +71,14 @@ export default
             {
                 const response = await fetch('http://localhost:3001/users/login', {
                     method: 'POST',
-                    body: {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
                         email: this.email,
                         password: this.password,
-                    }
+                    }),
                 });
 
                 console.log(response);
@@ -88,11 +92,24 @@ export default
                 }
 
                 const data = await response.json();
-                sessionStorage.setItem('logged', true);
-                sessionStorage.setItem('isAdmin', data.isAdmin ? true : false);
+                
+                switch (data.response)
+                {
+                    case 0:
+                        sessionStorage.setItem('logged', true);
+                        sessionStorage.setItem('isAdmin', data.isAdmin ? true : false);
 
-                location.reload();
-                return;
+                        location.reload();
+                        break;
+
+                    case 1:
+                        alert('Account not found for this email.');
+                        break;
+
+                    case 2:
+                        alert('Wrong password.');
+                        break;
+                }
             }
             catch (error)
             {
