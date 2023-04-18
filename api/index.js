@@ -75,6 +75,21 @@ app.post('/users/login', async (req, res) => {
   }
 })
 
+app.get('/bots/:id', async (req, res) => {
+  const id = req.params.id
+  try {
+    let bot = await botManager.getBot(id)
+    if (bot) {
+      res.status(200).send(bot)
+    } else {
+      res.sendStatus(409)
+    }
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.status(404).send('NOT FOUND')
+  }
+})
+
 app.get('/bots', async (req, res) => {
   try {
     let bots = await botManager.getAll()
@@ -83,6 +98,25 @@ app.get('/bots', async (req, res) => {
     } else {
       res.sendStatus(409)
     }
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.status(404).send('NOT FOUND')
+  }
+})
+
+app.post('/bots', async (req, res) => {
+  try {
+    const botData = {
+      name: req.body.name,
+      description: req.body.description,
+      script: req.body.script,
+      image: req.body.image
+    }
+    newBotId = await botManager.createBot(botData)
+    if (!newBotId) {
+      throw "Couldn't create new bot"
+    }
+    res.status(200).send({id:newBotId})
   } catch (err) {
     console.log(`Error ${err} thrown`)
     res.status(404).send('NOT FOUND')
