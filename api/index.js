@@ -44,7 +44,6 @@ app.get('/users/:id', (req, res) => {
 
 app.post('/users', async (req, res) => {
   try {
-    console.log(req.body)
     const email = req.body.email
     const password = req.body.password
     const nickname = req.body.nickname
