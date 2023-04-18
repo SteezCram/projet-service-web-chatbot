@@ -52,7 +52,8 @@ module.exports.getAdminStatus = async function (email) {
 
 module.exports.createUserAccount = async function (email, hashedPassword) {
   try {
-    await database.exec(`INSERT INTO chatbot_user (email, password) VALUES ('${email}', '${hashedPassword}')`)
+    const sql = `INSERT INTO chatbot_user (email, password) VALUES ('${email}', '${hashedPassword}')`
+    await database.run(sql)
     return true
   } catch (err) {
     console.error(err)

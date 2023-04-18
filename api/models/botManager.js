@@ -23,7 +23,7 @@ module.exports.getAll = async function () {
   try {
     dbRequest = await databaseManager.getBots()
     if (!dbRequest) {
-        dbRequest = []
+        dbRequest = {}
     }
   } catch (err) {
     console.error(err)
@@ -36,7 +36,7 @@ module.exports.getBot = async function (id) {
   try {
     dbRequest = await databaseManager.getBot(id)
     if (!dbRequest) {
-        dbRequest = []
+        dbRequest = {}
     }
   } catch (err) {
     console.error(err)
