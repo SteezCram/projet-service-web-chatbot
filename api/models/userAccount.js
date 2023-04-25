@@ -21,16 +21,34 @@ module.exports.createAccount = async function (email, plainPassword, nickname) {
   return res
 }
 
+module.exports.deleteAccount = async function (id) {
+  try {
+    const res = await databaseManager.deleteUserAccount(id)
+    return res
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 module.exports.loginAccount = async function (email, plainPassword) {
   try {
     const hashedPassword = await databaseManager.getHashedPassword(email)
     if (!hashedPassword) {
-      return undefined
+      return 1
     }
-    if  (!await passwordCryptographer.comparePlainHashed(plainPassword, hashedPassword)) {
-      return undefined
+    if (!await passwordCryptographer.comparePlainHashed(plainPassword, hashedPassword)) {
+      return 2
     }
     return await databaseManager.getUser(email)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+module.exports.getUser = async function (email) {
+  try {
+    const user = await databaseManager.getUser(email)
+    return user
   } catch (err) {
     console.error(err)
   }

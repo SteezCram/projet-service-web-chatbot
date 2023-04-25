@@ -8,20 +8,29 @@
                     </header-3>
 
                     <form @submit.prevent="signup($event)" class="space-y-4 md:space-y-6" action="#">
-                        <div>
-                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Votre email</label>
-                            <input v-model="email" type="email" name="email" id="email" class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="name@company.com" required="">
-                        </div>
+                        <input-text name="email" type="email" v-model="email" placeholder="name@company.com" required>
+                            <template v-slot:label>
+                                Adresse e-mail
+                            </template>
+                        </input-text>
 
-                        <div>
-                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de passe</label>
-                            <input v-model="password" type="password" name="password" id="password" class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required="">
-                        </div>
-
-                        <div>
-                            <label for="verifyPassword" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vérification du mot de passe</label>
-                            <input v-model="verifyPassword" type="password" name="verifyPassword" id="verifyPassword" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
-                        </div>
+                        <input-text name="nickname" type="text" v-model="nickname" placeholder="John Doe" required>
+                            <template v-slot:label>
+                                Surnom
+                            </template>
+                        </input-text>
+                        
+                        <input-text name="password" type="password" v-model="password" required>
+                            <template v-slot:label>
+                                Mot de passe
+                            </template>
+                        </input-text>
+                        
+                        <input-text class="!mt-1" name="verifyPassword" type="password" v-model="verifyPassword" required>
+                            <template v-slot:label>
+                                Vérifier le mot de passe
+                            </template>
+                        </input-text>
 
                         <btn-primary ref="submitButton">
                             Créer un compte
@@ -43,15 +52,10 @@ export default
     data() {
         return {
             email: '',
+            nickname: '',
             password: '',
             verifyPassword: '',
         }
-    },
-
-    async mounted()
-    {
-        const logged = sessionStorage.getItem('logged');
-        if (logged !== null) this.$router.push('/dashboard');
     },
 
 
@@ -73,6 +77,7 @@ export default
                     },
                     body: JSON.stringify({
                         email: this.email,
+                        nickname: this.nickname,
                         password: this.password,
                     }),
                 });
@@ -83,11 +88,17 @@ export default
                     return;
                 }
 
-                console.log(response);
+                const data = await response.json();
 
-                sessionStorage.setItem('logged', true);
+                sessionStorage.setItem('user', JSON.stringify({
+                    id: data.user.id,
+                    email: this.email,
+                    nickname: this.nickname,
+                    isAdmin: false,
+                    image: data.user.image,
+                }));
 
-                location.reload();
+                window.location.href = '/dashboard';
                 return;
             }
             catch (error)

@@ -8,15 +8,17 @@
                     </header-3>
 
                     <form @submit.prevent="login($event)" class="space-y-4 md:space-y-6" action="#">
-                        <div>
-                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Votre email</label>
-                            <input v-model="email" type="email" name="email" id="email" class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="name@company.com" required="">
-                        </div>
-
-                        <div>
-                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de passe</label>
-                            <input v-model="password" type="password" name="password" id="password" class="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required="">
-                        </div>
+                        <input-text name="email" type="email" v-model="email" placeholder="name@company.com" required>
+                            <template v-slot:label>
+                                Adresse e-mail
+                            </template>
+                        </input-text>
+                        
+                        <input-text name="password" type="password" v-model="password" required>
+                            <template v-slot:label>
+                                Mot de passe
+                            </template>
+                        </input-text>
 
                         <btn-primary ref="submitButton">
                             Se connecter
@@ -40,16 +42,6 @@ export default
             email: '',
             password: '',
         }
-    },
-
-
-    async mounted()
-    {
-        const logged = sessionStorage.getItem('logged');
-        const isAdmin = sessionStorage.getItem('isAdmin');
-
-        if (logged !== null)
-            if (isAdmin) this.$router.push('/admin'); else this.$router.push('/dashboard');
     },
 
 
@@ -92,14 +84,20 @@ export default
                 }
 
                 const data = await response.json();
+                console.log(data);
                 
                 switch (data.response)
                 {
                     case 0:
-                        sessionStorage.setItem('logged', true);
-                        sessionStorage.setItem('isAdmin', data.isAdmin ? true : false);
+                        sessionStorage.setItem('user', JSON.stringify({
+                            id: data.user.id,
+                            email: this.email,
+                            nickname: data.user.nickname,
+                            image: data.user.image,
+                            isAdmin: data.user.isAdmin,
+                        }));
 
-                        location.reload();
+                        window.location.href = data.user.isAdmin ? '/admin' : '/dashboard';
                         break;
 
                     case 1:

@@ -52,7 +52,14 @@ module.exports.getAdminStatus = async function (email) {
 
 module.exports.createUserAccount = async function (email, hashedPassword, nickname) {
   try {
-    const sql = `INSERT INTO chatbot_user (email, password, nickname) VALUES ('${email}', '${hashedPassword}', '${nickname}')`
+    const response = await fetch(`https://api.dicebear.com/6.x/fun-emoji/svg?seed=${nickname}`);
+    let avatar
+    if (response.ok) {
+      // Get the generated avatar
+      avatar = `data:image/svg+xml;base64,${Buffer.from(await response.text()).toString('base64')}`
+    }
+
+    const sql = `INSERT INTO chatbot_user (email, password, nickname, image) VALUES ('${email}', '${hashedPassword}', '${nickname}', '${avatar}')`
     await database.run(sql)
     return true
   } catch (err) {
@@ -60,6 +67,17 @@ module.exports.createUserAccount = async function (email, hashedPassword, nickna
     return false
   }
 }
+
+module.exports.deleteUserAccount = async function (id) {
+  try {
+    await database.run(`DELETE FROM chatbot_user WHERE id = ${id}`)
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
+
 
 module.exports.getBots = async function () {
   let result

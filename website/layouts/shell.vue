@@ -6,7 +6,7 @@
             </nuxt-link>
 
             <nav class="w-full">
-                <ul class="flex flex-row font-semibold">
+                <ul class="flex flex-row font-semibold items-center">
                     <li class="mr-2 hover:text-gray-200">
                         <nuxt-link to="/">
                             <i class="icon icon-home1"></i>
@@ -21,7 +21,7 @@
                         </nuxt-link>
                     </li>
 
-                    <li v-if="isAdmin" class="hover:text-gray-200">
+                    <li v-if="user_isAdmin" class="hover:text-gray-200">
                         <nuxt-link to="/admin">
                             <i class="icon icon-settings1"></i>
                             Admin
@@ -45,9 +45,8 @@
                     </li>
 
                     <li v-if="logged" class="ml-auto hover:text-gray-200">
-                        <nuxt-link @click="disconnect" to="#">
-                            <i class="icon icon-logout"></i>
-                            Se déconnecter
+                        <nuxt-link :to="`/dashboard/user`" title="Votre compte">
+                            <img class="w-8 h-8 ml-2 rounded-full" :src="user_image">
                         </nuxt-link>
                     </li>
                 </ul>
@@ -65,25 +64,21 @@ export default {
     data() {
         return {
             logged: false,
-            isAdmin: false,
+            user_id: 0,
+            user_isAdmin: false,
+            user_image: '',
         }
     },
 
     mounted() {
-        this.logged = sessionStorage.getItem('logged');
-        this.isAdmin = sessionStorage.getItem('isAdmin');
-    },
+        this.logged = sessionStorage.getItem('user') !== null;
 
-    methods: {
-        disconnect() {
-            sessionStorage.removeItem('logged');
-            sessionStorage.removeItem('isAdmin');
-
-            this.logged = false;
-            this.isAdmin = false;
-
-            this.$router.replace('/');
+        if (this.logged)
+        {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            this.user_isAdmin = user.isAdmin;
+            this.user_image = user.image;
         }
-    }
+    },
 }
 </script>

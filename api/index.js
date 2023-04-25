@@ -49,11 +49,11 @@ app.post('/users', async (req, res) => {
     const nickname = req.body.nickname
     let goodCreation = await userAccount.createAccount(email, password, nickname)
     if (goodCreation) {
-      res.sendStatus(201)
+      const user = await userAccount.getUser(email)
+      res.status(201).send({user: {id:user.id, image:user.image}})
     } else {
       res.sendStatus(409)
     }
-    
   } catch (err) {
     console.log(`Error ${err} thrown`)
     res.status(404).send('NOT FOUND')
@@ -65,15 +65,37 @@ app.post('/users/login', async (req, res) => {
     const email = req.body.email
     const password = req.body.password
     const userInformation = await userAccount.loginAccount(email, password)
-    let isAdmin, nickname
+    let id, isAdmin, nickname, image
     if (userInformation) {
       isAdmin = userInformation.isAdmin
       nickname = userInformation.nickname
+      image = userInformation.image
+      id = userInformation.id
     }
-    res.status(200).send({email:email, isAdmin:isAdmin, nickname:nickname})
+    res.status(200).send({response: userInformation.id ? 0 : userInformation, user: {id:id, email:email, image:image, isAdmin:isAdmin, nickname:nickname}})
   } catch (err) {
     console.log(`Error ${err} thrown`)
     res.status(404).send('NOT FOUND')
+  }
+})
+
+app.delete('/users/:id', async (req, res) => {
+  const id = req.params.id
+  if (!isInt(id)) {
+    // not the expected parameter
+    res.status(400).send('BAD REQUEST')
+  } else {
+    try {
+      let goodDeletion = await userAccount.deleteAccount(id)
+      if (goodDeletion) {
+        res.sendStatus(200)
+      } else {
+        res.sendStatus(409)
+      }
+    } catch (err) {
+      console.log(`Error ${err} thrown`)
+      res.status(404).send('NOT FOUND')
+    }
   }
 })
 
