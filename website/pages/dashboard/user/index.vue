@@ -2,13 +2,13 @@
     <container>
         <header-1 class="mb-3">Paramètres de votre compte</header-1>
 
-        <article class="bg-gray-100 dark:bg-gray-900">
+        <article class="bg-gray-100 dark:bg-gray-900 rounded shadow">
             <div class="flex flex-col md:flex-row">
-                <div class="w-full md:w-1/3">
-                    <img class="w-full h-auto" :src="user_image">
+                <div class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3">
+                    <img class="w-full h-auto rounded-l" :src="user_image">
                 </div>
 
-                <div class="w-full md:w-2/3 p-4">
+                <div class="w-full sm:w-1/2 md:w-3/5 lg:w-2/3 p-4">
                     <header-2>{{ user_nickname }}</header-2>
 
                     <p class="text-gray-500">{{ user_email }}</p>
