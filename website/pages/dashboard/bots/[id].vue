@@ -63,7 +63,7 @@
             </container>
         </section>
 
-        <form @submit.prevent="sendMessage($event)" class="absolute bottom-0 w-full">
+        <form @submit.prevent="sendMessage" class="absolute bottom-0 w-full">
             <container class="!min-h-0">
                 <label for="chat" class="sr-only">Votre message</label>
 
@@ -78,9 +78,9 @@
                         <span class="sr-only">Ajouter un emoji</span>
                     </button>
 
-                    <textarea id="chat" rows="1" class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-primary-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" :placeholder="`Envoyer un message à ${bot_name}`"></textarea>
+                    <textarea v-model="message" rows="1" class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-green-500 focus:border-primary-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" :placeholder="`Envoyer un message à ${bot_name}`"></textarea>
                     
-                    <button type="submit" class="inline-flex justify-center p-2 text-primary-600 rounded-full cursor-pointer hover:bg-primary-100 dark:text-primary-100 dark:hover:bg-primary-600">
+                    <button ref="submitButton" type="submit" class="inline-flex justify-center p-2 text-primary-600 rounded-full cursor-pointer hover:bg-primary-100 dark:text-primary-100 dark:hover:bg-primary-600">
                         <svg aria-hidden="true" class="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
                         <span class="sr-only">Envoyer le message</span>
                     </button>
@@ -98,9 +98,28 @@ export default
             bot_name: 'Jackie',
             bot_image: 'https://api.dicebear.com/6.x/bottts/svg?seed=jackie',
 
-            user_nickname: 'Steez',
-            user_image: 'https://api.dicebear.com/6.x/bottts/svg?seed=tcroizet@enssat.fr'
+            user_id: 0,
+            user_email: '',
+            user_image: '',
+            user_nickname: '',
+
+            message: '',
         }
+    },
+
+
+    mounted()
+    {
+        const user = sessionStorage.getItem('user');
+
+        if (user === null) this.$router.push('/login');
+
+        const userObject = JSON.parse(user);
+
+        this.user_id = userObject.id;
+        this.user_nickname = userObject.nickname;
+        this.user_email = userObject.email;
+        this.user_image = userObject.image;
     },
 
 
@@ -108,7 +127,14 @@ export default
     {
         sendMessage()
         {
+            this.$refs.submitButton.disabled = true;
 
+            if (this.message.length === 0) {
+                this.$refs.submitButton.disabled = false;
+                return;
+            }
+
+            this.$refs.submitButton.disabled = false;
         }
     }
 }

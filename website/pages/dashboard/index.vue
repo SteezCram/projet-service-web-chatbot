@@ -1,15 +1,15 @@
 <template>
     <container>
-        <div class="flex flex-col">
+        <div class="flex flex-col lg:flex-row lg:items-center">
             <header-1>Bienvenue {{ user_nickname }}</header-1>
 
-            <div class="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-4">
-                <btn-primary class="!w-auto" @click="$router.push(`/dashboard/user`)">
+            <div class="lg:ml-auto flex lg:flex-row">
+                <btn-primary class="mr-2 !w-auto" @click="$router.push(`/dashboard/user`)">
                     <i class="icon icon-edit"></i>
                     Paramètres du compte
                 </btn-primary>
 
-                <btn-primary class="!w-auto" @click="$router.push('/dashboard/discuss/new')">
+                <btn-primary class="!w-auto" @click="$router.push('/dashboard/bots/new')">
                     <i class="icon icon-plus"></i>
                     Nouvelle discussion avec un bot
                 </btn-primary>

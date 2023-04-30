@@ -8,7 +8,7 @@
                     <img class="w-full h-auto rounded-l" :src="user_image">
 
                     <div class="w-full flex absolute top-0 h-full bg-black bg-opacity-25 rounded-l">
-                        <label class="cursor-pointer flex items-center justify-center p-4 text-white text-center font-semibold" for="file">
+                        <label class="w-full cursor-pointer flex items-center justify-center p-4 text-white text-center font-semibold" for="file">
                             <span>Téléverser une nouvelle photo de profile</span>
                         </label>
 
@@ -41,7 +41,7 @@
                         </template>
                     </input-text> -->
 
-                    <btn-primary ref="submitButton" class="mt-auto !w-auto">
+                    <btn-primary ref="submitButton" class="mt-5 md:mt-auto !w-auto">
                         <i class="icon icon-logout"></i>
                         Mettre à jour
                     </btn-primary>
