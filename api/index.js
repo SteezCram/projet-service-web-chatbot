@@ -99,6 +99,28 @@ app.delete('/users/:id', async (req, res) => {
   }
 })
 
+app.patch('/users/:id', async (req, res) => {
+  const id = req.params.id
+  if (!isInt(id)) {
+    // not the expected parameter
+    res.status(400).send('BAD REQUEST')
+  } else {
+    try {
+      for (const key in req.body) {
+        let goodUpdate = await userAccount.updateAccount(id, key, req.body[key])
+        if (!goodUpdate) {
+          res.sendStatus(409)
+        }
+      }
+
+      res.sendStatus(200);
+    } catch (err) {
+      console.log(`Error ${err} thrown`)
+      res.status(404).send('NOT FOUND')
+    }
+  }
+})
+
 app.get('/bots/:id', async (req, res) => {
   const id = req.params.id
   try {

@@ -30,6 +30,15 @@ module.exports.deleteAccount = async function (id) {
   }
 }
 
+module.exports.updateAccount = async function (id, key, value) {
+  try {
+    const res = await databaseManager.updateUserAccount(id, key, value)
+    return res
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 module.exports.loginAccount = async function (email, plainPassword) {
   try {
     const hashedPassword = await databaseManager.getHashedPassword(email)

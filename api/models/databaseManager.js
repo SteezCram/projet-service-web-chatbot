@@ -78,6 +78,16 @@ module.exports.deleteUserAccount = async function (id) {
   }
 }
 
+module.exports.updateUserAccount = async function (id, key, value) {
+  try {
+    await database.run(`UPDATE chatbot_user SET ${key} = '${value}' WHERE id = ${id}`)
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
+
 
 module.exports.getBots = async function () {
   let result
