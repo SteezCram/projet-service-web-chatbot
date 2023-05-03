@@ -9,7 +9,14 @@ module.exports.createBot = async function (botData) {
     }
     const botDescription = botData.description
     const botScript = botData.script
-    const botImage = botData.image
+    let botImage = botData.image
+    if (!botImage) {
+      const response = await fetch(`https://api.dicebear.com/6.x/bottts-neutral/svg?seed=${botName}`);
+      if (response.ok) {
+        // Get the generated avatar
+        botImage = `data:image/svg+xml;base64,${Buffer.from(await response.text()).toString('base64')}`
+      }
+    }
 
     newBotID = await databaseManager.createBot(botName, botDescription, botScript, botImage)
   } catch (err) {

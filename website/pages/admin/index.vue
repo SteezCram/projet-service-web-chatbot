@@ -1,35 +1,51 @@
 <template>
     <container>
-        <div class="flex flex-row items-center">
-            <header-1>Bots</header-1>
+        <div class="flex flex-col lg:flex-row mb-5">
+            <header-1 class="mb-3 lg:mb-0">Bots</header-1>
 
-            <btn-primary class="ml-auto !w-auto" @click="$router.push('/admin/bots/add')">
+            <btn-primary class="lg:ml-auto !w-auto" @click="$router.push('/admin/bots/add')">
                 <i class="icon icon-plus"></i>
                 Ajouter un bot
             </btn-primary>
         </div>
 
-        <article class="rounded bg-gray-100 dark:bg-gray-900" v-for="x in bots">
-            <div class="flex flex-row items-center p-2">
-                <img class="rounded mr-2 h-8 w-8" :src="x.image" :alt="x.name"/>
-                <h1>{{ x.name }}</h1>
-            </div>
+        <article v-for="x in bots" class="bg-gray-100 dark:bg-gray-900 rounded shadow mt-4">
+            <div class="flex flex-col md:flex-row">
+                <div class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3">
+                    <img class="w-full h-auto rounded-t lg:rounded-l aspect-square" :src="x.image">
+                </div>
 
-            <p>{{ x.description }}</p>
+                <div class="w-full sm:w-1/2 md:w-3/5 lg:w-2/3 p-4">
+                    <header-2>{{ x.name }}</header-2>
 
-            <div class="bg-gray-200 dark:bg-gray-800">
-                <btn-primary class="bg-primary-600">
-                    <i class="icon icon-pencil"></i>
-                    Modifier
-                </btn-primary>
+                    <p class="text-gray-500">{{ x.description }}</p>
+
+                    <div class="mt-4 mb-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                        <btn-primary class="!w-auto" @click="$router.push('/admin/bots/edit')">
+                            <i class="icon icon-edit"></i>
+                            Modifier
+                        </btn-primary>
+
+                        <btn-primary class="!w-auto" @click="logout">
+                            <i class="icon icon-logout"></i>
+                            Déconnecter
+                        </btn-primary>
+
+                        <div class="hidden lg:block"></div>
+
+                        <btn-delete class="!w-auto" @click="deleteAccount">
+                            <i class="icon icon-trash"></i>
+                            Supprimer
+                        </btn-delete>
+                    </div>
+                </div>
             </div>
         </article>
     </container>
 </template>
 
 <script>
-export default
-{
+export default {
     data() {
         return {
             bots: [],
@@ -39,7 +55,11 @@ export default
 
     async mounted()
     {
-        const response = await $fetch('http://localhost:3001/bots');
+        const response = await fetch('http://localhost:3001/bots');
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
         this.bots = await response.json();
     }

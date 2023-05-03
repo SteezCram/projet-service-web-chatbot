@@ -1,10 +1,18 @@
 const databaseManager = require('./databaseManager')
 const passwordCryptographer = require('./passwordCryptographer')
 
-module.exports.createAccount = async function (email, plainPassword, nickname) {
+module.exports.createAccount = async function (email, plainPassword, nickname, image) {
   // TODO: verify email is valid
 
   // Verify provided email is not in the database
+  if (!image) {
+    const response = await fetch(`https://api.dicebear.com/6.x/fun-emoji/svg?seed=${nickname}`);
+    if (response.ok) {
+      // Get the generated avatar
+      image = `data:image/svg+xml;base64,${Buffer.from(await response.text()).toString('base64')}`
+    }
+  }
+  
   let res
   try {
     const dbRequest = await databaseManager.getUser(email)

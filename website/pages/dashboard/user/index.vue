@@ -1,11 +1,11 @@
 <template>
     <container>
-        <header-1 class="mb-3">Paramètres de votre compte</header-1>
+        <header-1 class="mb-5">Paramètres de votre compte</header-1>
 
         <article class="bg-gray-100 dark:bg-gray-900 rounded shadow">
             <div class="flex flex-col md:flex-row">
                 <div class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3">
-                    <img class="w-full h-auto rounded-l" :src="user_image">
+                    <img class="w-full h-auto rounded-t lg:rounded-l aspect-square" :src="user_image">
                 </div>
 
                 <div class="w-full sm:w-1/2 md:w-3/5 lg:w-2/3 p-4">
@@ -24,7 +24,7 @@
                             Déconnexion
                         </btn-primary>
 
-                        <div></div>
+                        <div class="hidden lg:block"></div>
 
                         <btn-delete class="!w-auto" @click="deleteAccount">
                             <i class="icon icon-trash"></i>

@@ -2,12 +2,12 @@
     <container>
         <header-1 class="mb-3">Ajouter un bot</header-1>
 
-        <form @submit.prevent="updateAccount" class="flex flex-col">
+        <form @submit.prevent="addBot" class="flex flex-col">
             <article class="bg-gray-100 dark:bg-gray-900 rounded flex flex-col sm:flex-row">
                 <div class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3 relative">
-                    <img class="w-full h-auto rounded-l" :src="bot_image">
+                    <img class="w-full h-auto rounded-t lg:rounded-l aspect-square" :src="bot_image">
 
-                    <div class="w-full flex absolute top-0 h-full bg-black bg-opacity-25 rounded-l">
+                    <div class="w-full flex absolute top-0 h-full bg-black bg-opacity-25 rounded-t lg:rounded-l">
                         <label class="w-full cursor-pointer flex items-center justify-center p-4 text-white text-center font-semibold" for="file">
                             <span>Téléverser une nouvelle photo de profile</span>
                         </label>
@@ -36,6 +36,12 @@
                     Rivescript du bot
                 </template>
             </input-text-area>
+
+            <div class="mt-2">
+                <label for="file_input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Téléverser un fichier rivescript</label>
+                <input @change="changeFile($event)" id="file_input" type="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Fichier rivescript</p>
+            </div>
 
             <btn-primary ref="submitButton" class="mt-10 !w-auto">
                 <i class="icon icon-logout"></i>
@@ -74,8 +80,29 @@ export default {
             });
         },
 
+        async changeFile(event)
+        {
+            const file = event.target.files[0];
+
+            this.bot_script = await new Promise((resolve, reject) =>
+            {
+                const reader = new FileReader();
+
+                reader.onload = (event) => {
+                    resolve(event.target.result);
+                };
+
+                reader.readAsText(file);
+            });
+        },
+
         async addBot()
         {
+            if (this.bot_name.length === 0 || this.bot_description.length === 0 || this.bot_script.length === 0) {
+                alert('Veuillez remplir tous les champs.');
+                return;
+            }
+
             this.$refs.submitButton.disabled = true;
 
             const response = await fetch(`http://localhost:3001/bots`, {

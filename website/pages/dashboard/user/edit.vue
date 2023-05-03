@@ -5,9 +5,9 @@
         <article class="bg-gray-100 dark:bg-gray-900 rounded">
             <form @submit.prevent="updateAccount" class="flex flex-col sm:flex-row">
                 <div class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3 relative">
-                    <img class="w-full h-auto rounded-l" :src="user_image">
+                    <img class="w-full h-auto rounded-t lg:rounded-l aspect-square" :src="user_image">
 
-                    <div class="w-full flex absolute top-0 h-full bg-black bg-opacity-25 rounded-l">
+                    <div class="w-full flex absolute top-0 h-full bg-black bg-opacity-25 rounded-t lg:rounded-l">
                         <label class="w-full cursor-pointer flex items-center justify-center p-4 text-white text-center font-semibold" for="file">
                             <span>Téléverser une nouvelle photo de profile</span>
                         </label>

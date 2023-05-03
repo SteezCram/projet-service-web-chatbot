@@ -1,10 +1,10 @@
 <template>
     <container>
         <div class="flex flex-col lg:flex-row lg:items-center">
-            <header-1>Bienvenue {{ user_nickname }}</header-1>
+            <header-1 class="mb-3 lg:mb-0">Bienvenue {{ user_nickname }}</header-1>
 
-            <div class="lg:ml-auto flex lg:flex-row">
-                <btn-primary class="mr-2 !w-auto" @click="$router.push(`/dashboard/user`)">
+            <div class="lg:ml-auto flex flex-col lg:flex-row">
+                <btn-primary class="mb-1 lg:mr-2 !w-auto" @click="$router.push(`/dashboard/user`)">
                     <i class="icon icon-edit"></i>
                     Paramètres du compte
                 </btn-primary>
