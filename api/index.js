@@ -126,6 +126,7 @@ app.get('/bots/:id', async (req, res) => {
   const id = req.params.id
   try {
     let bot = await botManager.getBot(id)
+    //console.log(bot)
     if (bot) {
       res.status(200).send(bot)
     } else {
@@ -167,6 +168,26 @@ app.post('/bots', async (req, res) => {
   } catch (err) {
     console.log(`Error ${err} thrown`)
     res.status(404).send('NOT FOUND')
+  }
+})
+
+app.delete('/bots/:id', async (req, res) => {
+  const id = req.params.id
+  if (!isInt(id)) {
+    // not the expected parameter
+    res.status(400).send('BAD REQUEST')
+  } else {
+    try {
+      let goodDeletion = await botManager.deleteBot(id)
+      if (goodDeletion) {
+        res.sendStatus(200)
+      } else {
+        res.sendStatus(409)
+      }
+    } catch (err) {
+      console.log(`Error ${err} thrown`)
+      res.status(404).send('NOT FOUND')
+    }
   }
 })
 

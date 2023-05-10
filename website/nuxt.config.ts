@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    ssr: true,
     css: [
         '~/assets/css/main.css',
         '~/assets/css/icons.css',
@@ -11,6 +12,7 @@ export default defineNuxtConfig({
         },
     },
     routeRules: {
-        '/*': { cors: true, }
+        '/admin/*': { cors: true, ssr: true, static: false, swr: false, },
+        '/*': { cors: true, static: true, },
     }
 })

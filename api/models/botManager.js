@@ -50,3 +50,16 @@ module.exports.getBot = async function (id) {
   }
   return dbRequest
 }
+
+module.exports.deleteBot = async function (id) {
+  let dbRequest
+  try {
+    dbRequest = await databaseManager.deleteBot(id)
+    if (!dbRequest) {
+        dbRequest = {}
+    }
+  } catch (err) {
+    console.error(err)
+  }
+  return dbRequest
+}

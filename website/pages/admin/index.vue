@@ -21,19 +21,19 @@
                     <p class="text-gray-500">{{ x.description }}</p>
 
                     <div class="mt-4 mb-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                        <btn-primary class="!w-auto" @click="$router.push('/admin/bots/edit')">
+                        <btn-primary class="!w-auto" @click="$router.push(`/admin/bots/edit/${x.id}`)">
                             <i class="icon icon-edit"></i>
                             Modifier
                         </btn-primary>
 
-                        <btn-primary class="!w-auto" @click="logout">
+                        <!-- <btn-primary class="!w-auto" @click="logout">
                             <i class="icon icon-logout"></i>
                             Déconnecter
-                        </btn-primary>
+                        </btn-primary> -->
 
-                        <div class="hidden lg:block"></div>
+                        <!-- <div class="hidden lg:block"></div> -->
 
-                        <btn-delete class="!w-auto" @click="deleteAccount">
+                        <btn-delete class="!w-auto" @click="deleteBot(x.id, x.name);">
                             <i class="icon icon-trash"></i>
                             Supprimer
                         </btn-delete>
@@ -44,24 +44,23 @@
     </container>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            bots: [],
-        }
-    },
+<script setup>
+const { data: bots, pending, refresh, error } = await useFetch(`http://localhost:3001/bots`);
 
-
-    async mounted()
-    {
-        const response = await fetch('http://localhost:3001/bots');
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        this.bots = await response.json();
+async function deleteBot(id, name)
+{
+    if (!confirm(`Voulez-vous supprimer le bot ${name} ? Cette opération est irréversible.`)) {
+        return;
     }
+
+    const response = await fetch(`http://localhost:3001/bots/${id}`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    refresh();
 }
 </script>

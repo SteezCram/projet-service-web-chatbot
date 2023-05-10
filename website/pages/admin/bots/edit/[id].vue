@@ -1,8 +1,8 @@
 <template>
     <container>
-        <header-1 class="mb-3">Ajouter un bot</header-1>
+        <header-1 class="mb-3">Modifier {{ originalBot.name }}</header-1>
 
-        <form @submit.prevent="addBot" class="flex flex-col">
+        <form @submit.prevent="editBot" class="flex flex-col">
             <article class="bg-gray-100 dark:bg-gray-900 rounded flex flex-col sm:flex-row">
                 <div class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3 relative">
                     <img class="w-full h-auto rounded-t lg:rounded-l aspect-square" :src="bot.image">
@@ -45,29 +45,86 @@
 
             <btn-primary ref="submitButton" class="mt-10 !w-auto">
                 <i class="icon icon-logout"></i>
-                Créer le bot
+                Modifier {{ originalBot.name }}
             </btn-primary>
         </form>
     </container>
 </template>
 
+<script setup>
+const submitButton = ref(null);
+const route = useRoute();
+
+const { data: bot, pending, refresh, error } = await useFetch(`http://localhost:3001/bots/${route.params.id}`);
+const originalBot = {
+    ...bot.value,
+};
+
+async function editBot()
+{
+    if (bot.value.name.length === 0 || bot.value.description.length === 0 || bot.value.script.length === 0) {
+        alert('Veuillez remplir tous les champs.');
+        return;
+    }
+
+    submitButton.value.$el.disabled = true;
+
+    const botObject = {
+        name: bot.value.name,
+        description: bot.value.description,
+        image: bot.value.image,
+        script: bot.value.script,
+    };
+
+    for (const key in botObject) {
+        if (botObject[key] === originalBot[key]) {
+            delete botObject[key];
+        }
+    }
+
+    if (Object.keys(botObject).length === 0) {
+        alert('Aucune modification n\'a été apportée.');
+        submitButton.value.$el.disabled = false;
+        return;
+    }
+
+    botObject.id = bot.value.id;
+
+    const response = await fetch(`http://localhost:3001/bots/${bot.id}`, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(botObject),
+    });
+
+    if (!response.ok) {
+        alert('Une erreur est survenue lors de la modification du bot.');
+        submitButton.value.$el.disabled = false;
+        return;
+    }
+
+    useRouter().push('/admin');
+}
+</script>
+
 <script>
 export default {
     data() {
         return {
-            bot: {
-                name: '',
-                description: '',
-                image: '',
-                script: '',
-            }
+            //bot: {},
+            //originalBot: { ...this.bot },
         }
     },
+
 
     methods:
     {
         async changeImage(event)
         {
+            console.log(this.bot);
+
             const file = event.target.files[0];
 
             this.bot.image = await new Promise((resolve, reject) =>
@@ -97,33 +154,6 @@ export default {
                 reader.readAsText(file);
             });
         },
-
-        async addBot()
-        {
-            if (this.bot.name.length === 0 || this.bot.description.length === 0 || this.bot.script.length === 0) {
-                alert('Veuillez remplir tous les champs.');
-                return;
-            }
-
-            this.$refs.submitButton.disabled = true;
-
-            const response = await fetch(`http://localhost:3001/bots`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(this.bot),
-            });
-
-            if (!response.ok) {
-                alert('Une erreur est survenue lors de la création du bot.');
-                this.$refs.submitButton.disabled = false;
-                return;
-            }
-
-            this.$router.push('/admin');
-        }
     }
 }
 </script>

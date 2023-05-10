@@ -95,7 +95,7 @@ module.exports.getBots = async function () {
 module.exports.getBot = async function (id) {
   let result
   try {
-    result = await database.all(`SELECT * FROM chatbot_bot WHERE id=${id}`)
+    result = await database.get(`SELECT * FROM chatbot_bot WHERE id=${id}`)
   } catch (err) {
     console.log(err)
   }
@@ -129,4 +129,14 @@ module.exports.createBot = async function (name, description, script, image) {
     console.error(err)
   }
   return res
+}
+
+module.exports.deleteBot = async function (id) {
+  try {
+    await database.run(`DELETE FROM chatbot_bot WHERE id = ${id}`)
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
+  }
 }
