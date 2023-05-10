@@ -1,5 +1,5 @@
 <template>
-    <div class="w-screen h-screen bg-white dark:bg-black">
+    <div class="w-screen h-screen bg-white dark:bg-black text-black dark:text-white">
         <header class="w-screen h-16 p-4 bg-primary-500 flex flex-row items-center text-white">
             <nuxt-link to="/">
                 <img class="w-8 h-8 mr-4" src="/favicon.ico">
@@ -59,7 +59,17 @@
     </div>
 </template>
 
-<script>
+<script setup>
+const logged = useCookie('user-id');
+let user_isAdmin = false;
+let user_image = '';
+
+if (logged.value) {
+    user_isAdmin = useCookie('user-is-admin');
+    user_image = useCookie('user-image');
+}
+</script>
+<!-- <script>
 export default {
     data() {
         return {
@@ -81,4 +91,4 @@ export default {
         }
     },
 }
-</script>
+</script> -->

@@ -34,9 +34,89 @@
     </section>
 </template>
 
-<script>
-export default
+<script setup>
+// Prevent logged users from accessing this page
+const logged = useCookie('user-id');
+if (logged.value) {
+    const user_isAdmin = useCookie('user-is-admin');
+    useRouter().push(user_isAdmin.value ? '/admin' : '/dashboard');
+}
+
+
+const email = ref('');
+const password = ref('');
+const submitButton = ref(null);
+
+async function login()
 {
+    submitButton.value.$el.disabled = true;
+
+    if (this.email === '' || this.password === '') {
+        submitButton.value.$el.disabled = false;
+        alert('Please fill all the fields.');
+        return;
+    }
+
+    try
+    {
+        const response = await fetch('http://localhost:3001/users/login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email.value,
+                password: password.value,
+            }),
+        });
+
+        if (!response.ok) {
+            submitButton.value.$el.disabled = false;
+            alert('Internal error.');
+            return;
+        }
+
+        const data = await response.json();
+        
+        switch (data.response)
+        {
+            case 0:
+                // Set cookies
+                const userId = useCookie('user-id');
+                userId.value = data.user.id;
+                const userEmail = useCookie('user-email');
+                userEmail.value = email.value;
+                const userNickname = useCookie('user-nickname');
+                userNickname.value = data.user.nickname;
+                const userIsAdmin = useCookie('user-is-admin');
+                userIsAdmin.value = data.user.isAdmin;
+                const userImage = useCookie('user-image');
+                userImage.value = data.user.image;
+
+                location.href = data.user.isAdmin ? '/admin' : '/dashboard';
+                break;
+
+            case 1:
+                alert('Account not found for this email.');
+                break;
+
+            case 2:
+                alert('Wrong password.');
+                break;
+        }
+    }
+    catch (error) {
+        alert('Internal error.');
+        console.log(error);
+    }
+
+    submitButton.value.$el.disabled = false;
+}
+</script>
+
+<!-- <script>
+export default {
     data() {
         return {
             email: '',
@@ -51,11 +131,9 @@ export default
         {
             this.$refs.submitButton.disabled = true;
 
-            if (this.email === '' || this.password === '')
-            {
+            if (this.email === '' || this.password === '') {
                 this.$refs.submitButton.disabled = false;
                 alert('Please fill all the fields.');
-
                 return;
             }
 
@@ -73,18 +151,13 @@ export default
                     }),
                 });
 
-                console.log(response);
-
-                if (!response.ok)
-                {
+                if (!response.ok) {
                     this.$refs.submitButton.disabled = false;
                     alert('Internal error.');
-
                     return;
                 }
 
                 const data = await response.json();
-                console.log(data);
                 
                 switch (data.response)
                 {
@@ -109,8 +182,7 @@ export default
                         break;
                 }
             }
-            catch (error)
-            {
+            catch (error) {
                 alert('Internal error.');
                 console.log(error);
             }
@@ -119,4 +191,4 @@ export default
         }
     }
 }
-</script>
+</script> -->

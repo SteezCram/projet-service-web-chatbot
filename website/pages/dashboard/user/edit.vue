@@ -5,7 +5,7 @@
         <article class="bg-gray-100 dark:bg-gray-900 rounded">
             <form @submit.prevent="updateAccount" class="flex flex-col sm:flex-row">
                 <div class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3 relative">
-                    <img class="w-full h-auto rounded-t lg:rounded-l aspect-square" :src="user_image">
+                    <img class="w-full h-auto rounded-t lg:rounded-l aspect-square" :src="user.image">
 
                     <div class="w-full flex absolute top-0 h-full bg-black bg-opacity-25 rounded-t lg:rounded-l">
                         <label class="w-full cursor-pointer flex items-center justify-center p-4 text-white text-center font-semibold" for="file">
@@ -17,13 +17,13 @@
                 </div>
 
                 <div class="flex flex-col w-full sm:w-1/2 md:w-3/5 lg:w-2/3 p-4">
-                    <input-text class="mb-2" name="nickname" type="text" v-model="user_nickname" placeholder="John Doe" required>
+                    <input-text class="mb-2" name="nickname" type="text" v-model="user.nickname" placeholder="John Doe" required>
                         <template v-slot:label>
                             Surnom
                         </template>
                     </input-text>
 
-                    <input-text name="email" type="email" v-model="user_email" placeholder="name@company.com" required>
+                    <input-text name="email" type="email" v-model="user.email" placeholder="name@company.com" required>
                         <template v-slot:label>
                             Adresse e-mail
                         </template>
@@ -51,92 +51,86 @@
     </container>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            user_nickname: '',
-            user_email: '',
-            user_image: '',
-            user_isAdmin: false,
-            password: '',
-            verifyPassword: '',
-        }
-    },
+<script setup>
+// Prevent access to this page if the user is not logged in
+const logged = useCookie('user-id');
+if (!logged.value) {
+    useRouter().push('/login');
+}
 
-    mounted() {
-        const user = sessionStorage.getItem('user');
-        if (user === null) this.$router.push('/login');
+const user_id = useCookie('user-id');
+const user_nickname = useCookie('user-nickname');
+const user_email = useCookie('user-email');
+const user_image = useCookie('user-image');
+const submitButton = ref(null);
 
-        const userObject = JSON.parse(user);
-
-        this.user_id = userObject.id;
-        this.user_nickname = userObject.nickname;
-        this.user_email = userObject.email;
-        this.user_image = userObject.image.replace(/(\r\n|\n|\r)/gm, "");
-        this.user_isAdmin = userObject.isAdmin;
-    },
-
-    methods:
-    {
-        async changeImage(event)
-        {
-            const file = event.target.files[0];
-
-            this.user_image = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-
-                reader.onload = (event) => {
-                    resolve(event.target.result);
-                };
-
-                reader.readAsDataURL(file);
-            });
-        },
-
-        async updateAccount()
-        {
-            this.$refs.submitButton.disabled = true;
-            const userSession = JSON.parse(sessionStorage.getItem('user'));
-
-            const user = {
-                id: this.user_id,
-                nickname: this.user_nickname,
-                email: this.user_email,
-                image: this.user_image,
-                isAdmin: this.user_isAdmin,
-            };
-
-            for (const key in user) {
-                if (user[key] === userSession[key] || user[key] === '') {
-                    delete(user[key]);
-                    continue;
-                }
-
-                userSession[key] = user[key];
-            }
-
-            const response = await fetch(`http://localhost:3001/users/${this.user_id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(user),
-            });
-
-            if (!response.ok) {
-                alert('Une erreur est survenue lors de la mise à jour de votre compte.');
-                this.$refs.submitButton.disabled = false;
-                return;
-            }
+// Store the value to modify here
+const user = {
+    nickname: user_nickname.value,
+    email: user_email.value,
+    image: user_image.value,
+}
 
 
+async function changeImage(event)
+{
+    const file = event.target.files[0];
 
-            sessionStorage.setItem('user', JSON.stringify(userSession));
+    user.image = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
 
-            this.$router.push('/dashboard/user');
-        }
+        reader.onload = (event) => {
+            resolve(event.target.result);
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
+async function updateAccount()
+{
+    submitButton.value.$el.disabled = true;
+
+    const userObject = {}
+
+    if (user.nickname && user.nickname !== user_nickname.value) {
+        userObject.nickname = user.nickname;
     }
+    if (user.email && user.email !== user_email.value) {
+        userObject.email = user.email;
+    }
+    if (user.image && user.image !== user_image.value) {
+        userObject.image = user.image;
+    }
+
+    if (Object.keys(userObject).length === 0) {
+        alert('Aucun champs n\'a été modifié.');
+        submitButton.value.$el.disabled = false;
+        return;
+    }
+
+    const response = await fetch(`http://localhost:3001/users/${user_id.value}`, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userObject),
+    });
+
+    if (!response.ok) {
+        alert('Une erreur est survenue lors de la mise à jour de votre compte.');
+        submitButton.value.$el.disabled = false;
+        return;
+    }
+
+    // Update the cookies value
+    user_nickname.value = user.nickname;
+    user_email.value = user.email;
+    user_image.value = user.image;
+
+    submitButton.value.$el.disabled = false;
+
+    useRouter().push('/dashboard/user');
 }
 </script>

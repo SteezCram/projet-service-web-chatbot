@@ -46,9 +46,73 @@
     </section>
 </template>
 
-<script>
-export default
+<script setup>
+// Prevent logged users from accessing this page
+const logged = useCookie('user-id');
+if (logged.value) {
+    const user_isAdmin = useCookie('user-is-admin');
+    useRouter().push(user_isAdmin.value ? '/admin' : '/dashboard');
+}
+
+
+const email = ref('');
+const nickname = ref('');
+const password = ref('');
+const verifyPassword = ref('');
+const submitButton = ref(null);
+
+async function signup()
 {
+    submitButton.value.$el.disabled = true;
+
+    try
+    {
+        const response = await fetch('http://localhost:3001/users', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: this.email,
+                nickname: this.nickname,
+                password: this.password,
+            }),
+        });
+
+        if (!response.ok) {
+            alert('The account already exists.');
+            submitButton.value.$el.disabled = false;
+            return;
+        }
+
+        const data = await response.json();
+
+        // Set cookies
+        const userId = useCookie('user-id');
+        userId.value = data.id;
+        const userEmail = useCookie('user-email');
+        userEmail.value = email.value;
+        const userNickname = useCookie('user-nickname');
+        userNickname.value = nickname.value;
+        const userIsAdmin = useCookie('user-is-admin');
+        userIsAdmin.value = false;
+        const userImage = useCookie('user-image');
+        userImage.value = data.image;
+
+        window.location.href = '/dashboard';
+        return;
+    }
+    catch (error) {
+        alert('Internal error.');
+        console.log(error);
+    }
+
+    submitButton.value.$el.disabled = false;
+}
+</script>
+<!-- <script>
+export default {
     data() {
         return {
             email: '',
@@ -67,8 +131,6 @@ export default
 
             try
             {
-                console.log(this.email, this.password, this.verifyPassword)
-
                 const response = await fetch('http://localhost:3001/users', {
                     method: 'POST',
                     headers: {
@@ -101,8 +163,7 @@ export default
                 window.location.href = '/dashboard';
                 return;
             }
-            catch (error)
-            {
+            catch (error) {
                 alert('Internal error.');
                 console.log(error);
             }
@@ -111,4 +172,4 @@ export default
         }
     }
 }
-</script>
+</script> -->

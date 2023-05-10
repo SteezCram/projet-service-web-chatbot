@@ -12,7 +12,6 @@ export default defineNuxtConfig({
         },
     },
     routeRules: {
-        '/admin/*': { cors: true, ssr: true, static: false, swr: false, },
-        '/*': { cors: true, static: true, },
+        '/**': { cors: true, ssr: true },
     }
 })

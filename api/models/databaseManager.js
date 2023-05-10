@@ -73,7 +73,10 @@ module.exports.deleteUserAccount = async function (id) {
 
 module.exports.updateUserAccount = async function (id, key, value) {
   try {
-    await database.run(`UPDATE chatbot_user SET ${key} = '${value}' WHERE id = ${id}`)
+    await database.run(`UPDATE chatbot_user SET ${key} = ? WHERE id = ?`, [
+      value,
+      id
+    ])
     return true
   } catch (err) {
     console.error(err)
@@ -133,7 +136,10 @@ module.exports.createBot = async function (name, description, script, image) {
 
 module.exports.updateBot = async function (id, key, value) {
   try {
-    await database.run(`UPDATE chatbot_bot SET ${key} = '${value}' WHERE id = ${id}`)
+    await database.run(`UPDATE chatbot_bot SET ${key} = ? WHERE id = ?`, [
+      value,
+      id
+    ])
     return true
   } catch (err) {
     console.error(err)

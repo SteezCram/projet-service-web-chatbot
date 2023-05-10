@@ -52,6 +52,17 @@
 </template>
 
 <script setup>
+// Prevent access to this page if the user is not logged in or is not an admin*
+const logged = useCookie('user-id');
+if (!logged.value) {
+    useRouter().push('/login');
+}
+const isAdmin = useCookie('user-is-admin');
+if (!isAdmin.value) {
+    useRouter().push('/dashboard');
+}
+
+
 const submitButton = ref(null);
 const route = useRoute();
 

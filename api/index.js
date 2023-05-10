@@ -47,11 +47,10 @@ app.post('/users', async (req, res) => {
     const email = req.body.email
     const password = req.body.password
     const nickname = req.body.nickname
-    const image = req.body.image
-    let goodCreation = await userAccount.createAccount(email, password, nickname, image)
+    let goodCreation = await userAccount.createAccount(email, password, nickname)
     if (goodCreation) {
       const user = await userAccount.getUser(email)
-      res.status(201).send({user: {id:user.id, image:user.image}})
+      res.status(201).send({id:user.id, image:user.image})
     } else {
       res.sendStatus(409)
     }
