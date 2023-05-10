@@ -52,8 +52,12 @@ module.exports.getAdminStatus = async function (email) {
 
 module.exports.createUserAccount = async function (email, hashedPassword, nickname, image) {
   try {
-    const sql = `INSERT INTO chatbot_user (email, password, nickname, image) VALUES ('${email}', '${hashedPassword}', '${nickname}', '${image}')`
-    await database.run(sql)
+    await database.run('INSERT INTO chatbot_user (email, password, nickname, image) VALUES (?, ?, ?, ?)', [
+      email,
+      hashedPassword,
+      nickname,
+      image
+    ])
     return true
   } catch (err) {
     console.error(err)
@@ -63,7 +67,7 @@ module.exports.createUserAccount = async function (email, hashedPassword, nickna
 
 module.exports.deleteUserAccount = async function (id) {
   try {
-    await database.run(`DELETE FROM chatbot_user WHERE id = ${id}`)
+    await database.run(`DELETE FROM chatbot_user WHERE id = ?`, id)
     return true
   } catch (err) {
     console.error(err)
@@ -98,7 +102,7 @@ module.exports.getBots = async function () {
 module.exports.getBot = async function (id) {
   let result
   try {
-    result = await database.get(`SELECT * FROM chatbot_bot WHERE id=${id}`)
+    result = await database.get(`SELECT * FROM chatbot_bot WHERE id= ?`, id)
   } catch (err) {
     console.log(err)
   }
@@ -108,25 +112,12 @@ module.exports.getBot = async function (id) {
 module.exports.createBot = async function (name, description, script, image) {
   let res
   try {
-    let fields = "name";
-    let values = `'${name}'`;
-    const separator = ", "
-
-    if (description){
-      fields += separator + "description"
-      values += separator + `'${description}'`
-    }
-    if (script){
-      fields += separator + "script"
-      values += separator + `'${script}'`
-    }
-    if (image){
-      fields += separator + "image"
-      values += separator + `'${image}'`
-    }
-    const sqlRequest = `INSERT INTO chatbot_bot (${fields}) VALUES (${values})`
-    //console.log(sqlRequest)
-    const result = await database.run(sqlRequest)
+    const result = await database.run('INSERT INTO chatbot_bot (name, description, script, image) VALUES (?, ?, ?, ?)', [
+      name,
+      description,
+      script,
+      image
+    ])
     res = result.lastID
   } catch (err) {
     console.error(err)
@@ -149,7 +140,7 @@ module.exports.updateBot = async function (id, key, value) {
 
 module.exports.deleteBot = async function (id) {
   try {
-    await database.run(`DELETE FROM chatbot_bot WHERE id = ${id}`)
+    await database.run(`DELETE FROM chatbot_bot WHERE id = ?`, id)
     return true
   } catch (err) {
     console.error(err)
