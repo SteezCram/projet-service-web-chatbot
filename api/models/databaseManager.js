@@ -131,6 +131,16 @@ module.exports.createBot = async function (name, description, script, image) {
   return res
 }
 
+module.exports.updateBot = async function (id, key, value) {
+  try {
+    await database.run(`UPDATE chatbot_bot SET ${key} = '${value}' WHERE id = ${id}`)
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
+
 module.exports.deleteBot = async function (id) {
   try {
     await database.run(`DELETE FROM chatbot_bot WHERE id = ${id}`)

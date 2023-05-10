@@ -38,12 +38,18 @@ module.exports.deleteAccount = async function (id) {
   }
 }
 
-module.exports.updateAccount = async function (id, key, value) {
+module.exports.updateAccount = async function (id, data) {
   try {
-    const res = await databaseManager.updateUserAccount(id, key, value)
-    return res
+    for (const key in data) {
+      const res = await databaseManager.updateUserAccount(id, key, data[key])
+      if (!res) {
+        return false
+      }
+    }
+    return true
   } catch (err) {
     console.error(err)
+    return false
   }
 }
 

@@ -88,9 +88,7 @@ async function editBot()
         return;
     }
 
-    botObject.id = bot.value.id;
-
-    const response = await fetch(`http://localhost:3001/bots/${bot.id}`, {
+    const response = await fetch(`http://localhost:3001/bots/${bot.value.id}`, {
         method: 'PATCH',
         headers: {
             'Accept': 'application/json',

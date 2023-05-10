@@ -25,6 +25,21 @@ module.exports.createBot = async function (botData) {
   return newBotID
 }
 
+module.exports.updateBot = async function (id, botData) {
+  try {
+    for (const key in botData) {
+      const res = await databaseManager.updateBot(id, key, botData[key])
+      if (!res) {
+        return false
+      }
+    }
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
+
 module.exports.getAll = async function () {
   let dbRequest
   try {
