@@ -58,6 +58,7 @@ function logout() {
     user_isAdmin.value = null;
     user_id.value = null;
 
+    // Use a redirection since the shell is not reactive
     location.href = '/login';
 }
 
@@ -80,58 +81,3 @@ async function deleteAccount()
     logout();
 }
 </script>
-
-<!-- <script>
-export default {
-    data() {
-        return {
-            user_nickname: '',
-            user_email: '',
-            user_image: '',
-            user_isAdmin: false,
-        }
-    },
-
-    mounted() {
-        const user = sessionStorage.getItem('user');
-
-        if (user === null) this.$router.push('/login');
-
-        const userObject = JSON.parse(user);
-
-        this.user_id = userObject.id;
-        this.user_nickname = userObject.nickname;
-        this.user_email = userObject.email;
-        this.user_image = userObject.image;
-        this.user_isAdmin = userObject.isAdmin;
-    },
-
-
-    methods:
-    {
-        async deleteAccount()
-        {
-            if (!confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Il n\'y a aucun retour en arrière possible.')) return;
-
-            const response = await fetch(`http://localhost:3001/users/${this.user_id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                alert('An error occured.');
-                return;
-            }
-
-            this.logout();
-        },
-
-        logout() {
-            sessionStorage.removeItem('user');
-            window.location.href = '/login';
-        }
-    }
-}
-</script> -->

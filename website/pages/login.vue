@@ -94,6 +94,7 @@ async function login()
                 const userImage = useCookie('user-image');
                 userImage.value = data.user.image;
 
+                // Use a redirection since the shell is not reactive
                 location.href = data.user.isAdmin ? '/admin' : '/dashboard';
                 break;
 

@@ -28,23 +28,3 @@ if (!logged.value) {
 
 const user_nickname = useCookie('user-nickname');
 </script>
-
-<!-- <script>
-export default {
-    data() {
-        return {
-            user_nickname: '',
-        }
-    },
-
-    mounted() {
-        const user = sessionStorage.getItem('user');
-
-        if (user === null) this.$router.push('/login');
-
-        const userObject = JSON.parse(user);
-
-        this.user_nickname = userObject.nickname;
-    }
-}
-</script> -->

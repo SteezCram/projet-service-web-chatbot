@@ -69,26 +69,3 @@ if (logged.value) {
     user_image = useCookie('user-image');
 }
 </script>
-<!-- <script>
-export default {
-    data() {
-        return {
-            logged: false,
-            user_id: 0,
-            user_isAdmin: false,
-            user_image: '',
-        }
-    },
-
-    mounted() {
-        this.logged = sessionStorage.getItem('user') !== null;
-
-        if (this.logged)
-        {
-            const user = JSON.parse(sessionStorage.getItem('user'));
-            this.user_isAdmin = user.isAdmin;
-            this.user_image = user.image;
-        }
-    },
-}
-</script> -->
