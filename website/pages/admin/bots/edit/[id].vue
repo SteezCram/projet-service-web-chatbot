@@ -116,53 +116,38 @@ async function editBot()
 
     useRouter().push('/admin');
 }
-</script>
 
-<script>
-export default {
-    data() {
-        return {
-            //bot: {},
-            //originalBot: { ...this.bot },
-        }
-    },
+async function changeImage(event)
+{
+    console.log(this.bot);
 
+    const file = event.target.files[0];
 
-    methods:
+    bot.value.image = await new Promise((resolve, reject) =>
     {
-        async changeImage(event)
-        {
-            console.log(this.bot);
+        const reader = new FileReader();
 
-            const file = event.target.files[0];
+        reader.onload = (event) => {
+            resolve(event.target.result);
+        };
 
-            this.bot.image = await new Promise((resolve, reject) =>
-            {
-                const reader = new FileReader();
+        reader.readAsDataURL(file);
+    });
+}
 
-                reader.onload = (event) => {
-                    resolve(event.target.result);
-                };
+async function changeFile(event)
+{
+    const file = event.target.files[0];
 
-                reader.readAsDataURL(file);
-            });
-        },
+    bot.value.script = await new Promise((resolve, reject) =>
+    {
+        const reader = new FileReader();
 
-        async changeFile(event)
-        {
-            const file = event.target.files[0];
+        reader.onload = (event) => {
+            resolve(event.target.result);
+        };
 
-            this.bot.script = await new Promise((resolve, reject) =>
-            {
-                const reader = new FileReader();
-
-                reader.onload = (event) => {
-                    resolve(event.target.result);
-                };
-
-                reader.readAsText(file);
-            });
-        },
-    }
+        reader.readAsText(file);
+    });
 }
 </script>
