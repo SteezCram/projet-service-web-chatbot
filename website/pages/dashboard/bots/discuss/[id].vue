@@ -93,7 +93,6 @@
 <script setup>
 // Prevent access to this page if the user is not logged in
 const logged = useCookie('user-id');
-console.log(logged.value, !logged.value)
 if (!logged.value) {
     useRouter().push('/login');
 }
