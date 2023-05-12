@@ -1,6 +1,6 @@
 <template>
     <container>
-        <header-1 class="mb-3">Modifier votre compte</header-1>
+        <header-1 class="mb-5">Modifier votre compte</header-1>
 
         <article class="bg-gray-100 dark:bg-gray-900 rounded">
             <form @submit.prevent="updateAccount" class="flex flex-col sm:flex-row">

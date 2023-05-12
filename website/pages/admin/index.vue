@@ -1,6 +1,6 @@
 <template>
     <container>
-        <div class="flex flex-col lg:flex-row mb-5">
+        <div class="flex flex-col lg:flex-row lg:items-center mb-5">
             <header-1 class="mb-3 lg:mb-0">Bots</header-1>
 
             <btn-primary class="lg:ml-auto !w-auto" @click="$router.push('/admin/bots/add')">
