@@ -14,6 +14,11 @@ const dbPATH = '../database.db';
   })
 })()
 
+
+
+
+// chatbot_user
+
 module.exports.getUser = async function (email) {
   let result
   try {
@@ -89,6 +94,10 @@ module.exports.updateUserAccount = async function (id, key, value) {
 }
 
 
+
+
+// chatbot_bot
+
 module.exports.getBots = async function () {
   let result
   try {
@@ -141,6 +150,68 @@ module.exports.updateBot = async function (id, key, value) {
 module.exports.deleteBot = async function (id) {
   try {
     await database.run(`DELETE FROM chatbot_bot WHERE id = ?`, id)
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
+
+
+
+
+//chatbot_riverscript
+
+module.exports.getRiveScripts = async function () {
+  let result
+  try {
+    result = await database.all(`SELECT * FROM chatbot_rivescript`)
+  } catch (err) {
+    console.log(err)
+  }
+  return result
+}
+
+module.exports.getRiveScript = async function (id) {
+  let result
+  try {
+    result = await database.get(`SELECT * FROM chatbot_rivescript WHERE id= ?`, id)
+  } catch (err) {
+    console.log(err)
+  }
+  return result
+}
+
+module.exports.createRiveScript = async function (name, content) {
+  let res
+  try {
+    const result = await database.run('INSERT INTO chatbot_rivescript (name, content) VALUES (?, ?)', [
+        name,
+        content
+    ])
+    res = result.lastID
+  } catch (err) {
+    console.error(err)
+  }
+  return res
+}
+
+module.exports.updateRiveScript = async function (id, key, value) {
+  try {
+    await database.run(`UPDATE chatbot_rivescript SET ${key} = ? WHERE id = ?`, [
+      value,
+      id
+    ])
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
+
+module.exports.deleteRiveScript = async function (id) {
+  try {
+    await database.run(`DELETE FROM chatbot_rivescript WHERE id = ?`, id)
     return true
   } catch (err) {
     console.error(err)
