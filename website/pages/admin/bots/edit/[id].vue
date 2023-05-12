@@ -5,9 +5,9 @@
         <form @submit.prevent="editBot" class="flex flex-col">
             <article class="bg-gray-100 dark:bg-gray-900 rounded flex flex-col sm:flex-row">
                 <div class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3 relative">
-                    <img class="w-full h-auto rounded-t lg:rounded-l aspect-square" :src="bot.image">
+                    <img class="w-full h-auto rounded-t sm:rounded-t-none sm:rounded-tl sm:rounded-bl aspect-square" :src="bot.image">
 
-                    <div class="w-full flex absolute top-0 h-full bg-black bg-opacity-25 rounded-t lg:rounded-l">
+                    <div class="w-full flex absolute top-0 h-full bg-black bg-opacity-25 rounded-t sm:rounded-t-none sm:rounded-tl sm:rounded-bl">
                         <label class="w-full cursor-pointer flex items-center justify-center p-4 text-white text-center font-semibold" for="file">
                             <span>Téléverser une nouvelle photo de profil</span>
                         </label>
@@ -22,26 +22,16 @@
                             Nom du bot
                         </template>
                     </input-text>
+
+                    <input-text class="mt-2" type="text" name="description" v-model="bot.description" required>
+                        <template v-slot:label>
+                            Description du bot
+                        </template>
+                    </input-text>
                 </div>
             </article>
 
-            <input-text class="mt-2" type="text" name="description" v-model="bot.description" required>
-                <template v-slot:label>
-                    Description du bot
-                </template>
-            </input-text>
-
-            <input-text-area class="mt-2" name="script" v-model="bot.script" rows="5" required>
-                <template v-slot:label>
-                    Rivescript du bot
-                </template>
-            </input-text-area>
-
-            <div class="mt-2">
-                <label for="file_input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Téléverser un fichier rivescript</label>
-                <input @change="changeFile($event)" id="file_input" type="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Fichier rivescript</p>
-            </div>
+            <rivescript-manager class="mt-3"></rivescript-manager>
 
             <btn-primary ref="submitButton" class="mt-10 !w-auto">
                 <i class="icon icon-logout"></i>
