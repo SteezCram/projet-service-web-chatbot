@@ -2,6 +2,7 @@ const PORT_SERVER = 3001
 
 const userAccount = require('./models/userAccount')
 const botManager = require('./models/botManager')
+const riveScriptManager = require('./models/riveScriptManager')
 
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -22,6 +23,10 @@ app.get('/', (req, res) => {
     res.status(404).send('NOT FOUND')
   }
 })
+
+
+
+// User
 
 app.get('/users/:id', (req, res) => {
   const id = req.params.id
@@ -119,6 +124,10 @@ app.patch('/users/:id', async (req, res) => {
   }
 })
 
+
+
+// Bots
+
 app.get('/bots/:id', async (req, res) => {
   const id = req.params.id
   try {
@@ -207,6 +216,103 @@ app.delete('/bots/:id', async (req, res) => {
     }
   }
 })
+
+
+
+
+//Rive Scripts
+
+app.get('/rivescripts/:id', async (req, res) => {
+  const id = req.params.id
+  try {
+    let riveScript = await riveScriptManager.getRiveScript(id)
+    //console.log(riveScript)
+    if (riveScript) {
+      res.status(200).send(riveScript)
+    } else {
+      res.sendStatus(409)
+    }
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.status(404).send('NOT FOUND')
+  }
+})
+
+app.get('/rivescripts', async (req, res) => {
+  try {
+    let riveScripts = await riveScriptManager.getAll()
+    if (riveScripts) {
+      res.status(200).send(riveScripts)
+    } else {
+      res.sendStatus(409)
+    }
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.status(404).send('NOT FOUND')
+  }
+})
+
+app.post('/rivescripts', async (req, res) => {
+  try {
+    const riveScriptData = {
+      name: req.body.name,
+      content: req.body.content,
+    }
+    newRiveScriptId = await riveScriptManager.createRiveScript(riveScriptData)
+    if (!newRiveScriptId) {
+      throw "Couldn't create new rive script"
+    }
+    res.status(200).send({id:newRiveScriptId})
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.status(404).send('NOT FOUND')
+  }
+})
+
+app.patch('/rivescripts/:id', async (req, res) => {
+  const id = req.params.id
+  if (!isInt(id)) {
+    // not the expected parameter
+    res.status(400).send('BAD REQUEST')
+  } else {
+    try {
+      const goodUpdate = await riveScriptManager.updateRiveScript(id, req.body)
+      if (!goodUpdate) {
+        res.sendStatus(500)
+      } else {
+        res.sendStatus(200)
+      }
+    } catch (err) {
+      console.log(`Error ${err} thrown`)
+      res.status(404).send('NOT FOUND')
+    }
+  }
+})
+
+app.delete('/rivescripts/:id', async (req, res) => {
+  const id = req.params.id
+  if (!isInt(id)) {
+    // not the expected parameter
+    res.status(400).send('BAD REQUEST')
+  } else {
+    try {
+      let goodDeletion = await riveScriptManager.deleteRiveScript(id)
+      if (goodDeletion) {
+        res.sendStatus(200)
+      } else {
+        res.sendStatus(409)
+      }
+    } catch (err) {
+      console.log(`Error ${err} thrown`)
+      res.status(404).send('NOT FOUND')
+    }
+  }
+})
+
+
+
+
+//
 
 function isInt (value) {
   const x = parseFloat(value)
