@@ -3,35 +3,35 @@
         <section style="height: calc(100% - 57.6px);" class="pb-5 overflow-y-auto">
             <container class="flex flex-col">
                 <div class="flex flex-row">
-                    <img class="w-10 h-10 rounded-full mr-2" :src="bot_image">
+                    <img class="w-10 h-10 rounded-full mr-2" :src="bot.image">
 
                     <article class="max-w-sm">
-                        <header-4>{{ bot_name }}</header-4>
+                        <header-4>{{ bot.name }}</header-4>
                         <p class="text-justify">Salut comment vas-tu ?</p>
                     </article>
                 </div>
 
                 <div class="flex flex-row mt-2 ml-auto">
                     <article class="max-w-sm">
-                        <header-4 class="text-right">{{ user_nickname }}</header-4>
+                        <header-4 class="text-right">{{ user.nickname }}</header-4>
                         <p class="text-justify">Salut, bien et toi ?</p>
                     </article>
 
-                    <img class="w-10 h-10 rounded-full ml-2" :src="user_image">
+                    <img class="w-10 h-10 rounded-full ml-2" :src="user.image">
                 </div>
 
                 <div class="flex flex-row">
-                    <img class="w-10 h-10 rounded-full mr-2" :src="bot_image">
+                    <img class="w-10 h-10 rounded-full mr-2" :src="bot.image">
 
                     <article class="max-w-sm">
-                        <header-4>{{ bot_name }}</header-4>
+                        <header-4>{{ bot.name }}</header-4>
                         <p class="text-sm text-gray-500 text-justify">Jackie écrit...</p>
                     </article>
                 </div>
 
                 <div class="flex flex-row mt-2 ml-auto">
                     <article class="max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-                        <header-4 class="text-right">{{ user_nickname }}</header-4>
+                        <header-4 class="text-right">{{ user.nickname }}</header-4>
                         
                         <p class="text-justify">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
@@ -58,7 +58,7 @@
                         </p>
                     </article>
 
-                    <img class="w-10 h-10 rounded-full ml-2" :src="user_image">
+                    <img class="w-10 h-10 rounded-full ml-2" :src="user.image">
                 </div>          
             </container>
         </section>
@@ -90,52 +90,40 @@
     </container-full>
 </template>
 
-<script>
-export default
+<script setup>
+// Prevent access to this page if the user is not logged in
+const logged = useCookie('user-id');
+console.log(logged.value, !logged.value)
+if (!logged.value) {
+    useRouter().push('/login');
+}
+
+
+const submitButton = ref(null);
+const bot = {
+    id: useRoute().params.id,
+    name: 'Jackie',
+    image: 'https://api.dicebear.com/6.x/bottts/svg?seed=jackie',
+}
+const user = {
+    id: useCookie('user-id').value,
+    email: useCookie('user-email').value,
+    nickname: useCookie('user-nickname').value,
+    isAdmin: useCookie('user-is-admin').value,
+    image: useCookie('user-image').value,
+}
+const message = ref('');
+
+
+async function sendMessage()
 {
-    data() {
-        return {
-            bot_name: 'Jackie',
-            bot_image: 'https://api.dicebear.com/6.x/bottts/svg?seed=jackie',
+    submitButton.value.$el.disabled = true;
 
-            user_id: 0,
-            user_email: '',
-            user_image: '',
-            user_nickname: '',
-
-            message: '',
-        }
-    },
-
-
-    mounted()
-    {
-        const user = sessionStorage.getItem('user');
-
-        if (user === null) this.$router.push('/login');
-
-        const userObject = JSON.parse(user);
-
-        this.user_id = userObject.id;
-        this.user_nickname = userObject.nickname;
-        this.user_email = userObject.email;
-        this.user_image = userObject.image;
-    },
-
-
-    methods:
-    {
-        sendMessage()
-        {
-            this.$refs.submitButton.disabled = true;
-
-            if (this.message.length === 0) {
-                this.$refs.submitButton.disabled = false;
-                return;
-            }
-
-            this.$refs.submitButton.disabled = false;
-        }
+    if (message.value.length === 0) {
+        submitButton.value.$el.disabled = false;
+        return;
     }
+
+    submitButton.value.$el.disabled = false;
 }
 </script>
