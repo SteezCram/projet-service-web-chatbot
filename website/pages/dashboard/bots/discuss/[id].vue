@@ -3,35 +3,35 @@
         <section style="height: calc(100% - 57.6px);" class="pb-5 overflow-y-auto">
             <container class="flex flex-col">
                 <div class="flex flex-row">
-                    <img class="w-10 h-10 rounded-full mr-2" :src="bot.image">
+                    <img class="w-10 h-10 rounded-full mr-2" :src="bot_image">
 
                     <article class="max-w-sm">
-                        <header-4>{{ bot.name }}</header-4>
+                        <header-4>{{ bot_name }}</header-4>
                         <p class="text-justify">Salut comment vas-tu ?</p>
                     </article>
                 </div>
 
                 <div class="flex flex-row mt-2 ml-auto">
                     <article class="max-w-sm">
-                        <header-4 class="text-right">{{ user.nickname }}</header-4>
+                        <header-4 class="text-right">{{ user_nickname }}</header-4>
                         <p class="text-justify">Salut, bien et toi ?</p>
                     </article>
 
-                    <img class="w-10 h-10 rounded-full ml-2" :src="user.image">
+                    <img class="w-10 h-10 rounded-full ml-2" :src="user_image">
                 </div>
 
                 <div class="flex flex-row">
-                    <img class="w-10 h-10 rounded-full mr-2" :src="bot.image">
+                    <img class="w-10 h-10 rounded-full mr-2" :src="bot_image">
 
                     <article class="max-w-sm">
-                        <header-4>{{ bot.name }}</header-4>
+                        <header-4>{{ bot_name }}</header-4>
                         <p class="text-sm text-gray-500 text-justify">Jackie écrit...</p>
                     </article>
                 </div>
 
                 <div class="flex flex-row mt-2 ml-auto">
                     <article class="max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-                        <header-4 class="text-right">{{ user.nickname }}</header-4>
+                        <header-4 class="text-right">{{ user_nickname }}</header-4>
                         
                         <p class="text-justify">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
@@ -58,7 +58,7 @@
                         </p>
                     </article>
 
-                    <img class="w-10 h-10 rounded-full ml-2" :src="user.image">
+                    <img class="w-10 h-10 rounded-full ml-2" :src="user_image">
                 </div>          
             </container>
         </section>
@@ -100,18 +100,14 @@ if (!logged.value) {
 
 
 const submitButton = ref(null);
-const bot = {
-    id: useRoute().params.id,
-    name: 'Jackie',
-    image: 'https://api.dicebear.com/6.x/bottts/svg?seed=jackie',
-}
-const user = {
-    id: useCookie('user-id').value,
-    email: useCookie('user-email').value,
-    nickname: useCookie('user-nickname').value,
-    isAdmin: useCookie('user-is-admin').value,
-    image: useCookie('user-image').value,
-}
+const bot_id = useRoute().params.id;
+const bot_name = 'Jackie';
+const bot_image = 'https://api.dicebear.com/6.x/bottts/svg?seed=jackie';
+const user_id = useCookie('user-id');
+const user_email = useCookie('user-email');
+const user_nickname = useCookie('user-nickname');
+const user_isAdmin = useCookie('user-is-admin');
+const user_image = useCookie('user-image');
 const message = ref('');
 
 

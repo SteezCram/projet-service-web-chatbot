@@ -2,7 +2,7 @@
     <container>
         <header-1 class="mb-5">Paramètres de votre compte</header-1>
 
-        <article class="bg-gray-100 dark:bg-gray-900 rounded shadow">
+        <!-- <article class="bg-gray-100 dark:bg-gray-900 rounded shadow">
             <div class="flex flex-col md:flex-row">
                 <div class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3">
                     <img class="w-full h-auto rounded-t lg:rounded-l aspect-square" :src="user_image">
@@ -33,7 +33,32 @@
                     </div>
                 </div>
             </div>
-        </article>
+        </article> -->
+
+        <user-card :image="user_image">
+            <template v-slot:header>{{ user_nickname }}</template>
+            <template v-slot:description>{{ user_email }}</template>
+            <template v-slot:actions>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    <btn-primary class="!w-auto" @click="$router.push('/dashboard/user/edit')">
+                        <i class="icon icon-edit"></i>
+                        Modifier
+                    </btn-primary>
+
+                    <btn-primary class="!w-auto" @click="logout">
+                        <i class="icon icon-logout"></i>
+                        Déconnexion
+                    </btn-primary>
+
+                    <div class="hidden lg:block"></div>
+
+                    <btn-delete class="!w-auto" @click="deleteAccount">
+                        <i class="icon icon-trash"></i>
+                        Supprimer
+                    </btn-delete>
+                </div>
+            </template>
+        </user-card>
     </container>
 </template>
 
