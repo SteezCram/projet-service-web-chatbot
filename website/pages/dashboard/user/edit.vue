@@ -9,7 +9,7 @@
 
                     <div class="w-full flex absolute top-0 h-full bg-black bg-opacity-25 rounded-t lg:rounded-l">
                         <label class="w-full cursor-pointer flex items-center justify-center p-4 text-white text-center font-semibold" for="file">
-                            <span>Téléverser une nouvelle photo de profile</span>
+                            <span>Téléverser une nouvelle photo de profil</span>
                         </label>
 
                         <input id="file" name="file" type="file" class="hidden" ref="file" @change="changeImage($event)" accept="image/*">
