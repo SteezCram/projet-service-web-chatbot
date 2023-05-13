@@ -1,5 +1,5 @@
 <template>
-    <div class="w-screen h-screen bg-white dark:bg-black text-black dark:text-white">
+    <div class="w-screen min-h-screen bg-white dark:bg-black text-black dark:text-white">
         <header class="w-screen h-16 p-4 bg-primary-500 flex flex-row items-center text-white">
             <nuxt-link to="/">
                 <img class="w-8 h-8 mr-4" src="/favicon.ico">

@@ -31,7 +31,7 @@
                 </div>
             </article>
 
-            <rivescript-manager class="mt-5"></rivescript-manager>
+            <rivescript-manager for-bot ref="rivescriptManager" class="mt-5"></rivescript-manager>
 
             <btn-primary ref="submitButton" class="mt-10 !w-auto">
                 <i class="icon icon-logout"></i>
@@ -62,6 +62,7 @@ export default {
                 description: '',
                 image: '',
                 script: '',
+                rivescripts: [],
             }
         }
     },
@@ -84,28 +85,14 @@ export default {
             });
         },
 
-        async changeFile(event)
-        {
-            const file = event.target.files[0];
-
-            this.bot.script = await new Promise((resolve, reject) =>
-            {
-                const reader = new FileReader();
-
-                reader.onload = (event) => {
-                    resolve(event.target.result);
-                };
-
-                reader.readAsText(file);
-            });
-        },
-
         async addBot()
         {
             if (this.bot.name.length === 0 || this.bot.description.length === 0 || this.bot.script.length === 0) {
                 alert('Veuillez remplir tous les champs.');
                 return;
             }
+
+            this.bot.rivescripts = this.$refs.rivescriptManager.rivescriptsChecked;
 
             this.$refs.submitButton.disabled = true;
 

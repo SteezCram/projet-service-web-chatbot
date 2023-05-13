@@ -102,6 +102,10 @@ module.exports.getBots = async function () {
   let result
   try {
     result = await database.all(`SELECT * FROM chatbot_bot`)
+    result.map(bot => {
+      bot.rivescripts = JSON.parse(bot.rivescripts)
+      return bot
+    })
   } catch (err) {
     console.log(err)
   }
@@ -112,6 +116,7 @@ module.exports.getBot = async function (id) {
   let result
   try {
     result = await database.get(`SELECT * FROM chatbot_bot WHERE id= ?`, id)
+    result.rivescripts = JSON.parse(result.rivescripts)
   } catch (err) {
     console.log(err)
   }

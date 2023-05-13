@@ -31,7 +31,7 @@
                 </div>
             </article>
 
-            <rivescript-manager class="mt-5"></rivescript-manager>
+            <rivescript-manager for-bot :rivescripts="bot.rivescripts" @update:rivescripts="updateRivescripts($event)" class="mt-5"></rivescript-manager>
 
             <btn-primary ref="submitButton" class="mt-10 !w-auto">
                 <i class="icon icon-logout"></i>
@@ -75,6 +75,7 @@ async function editBot()
         description: bot.value.description,
         image: bot.value.image,
         script: bot.value.script,
+        rivescripts: bot.value.rivescripts,
     };
 
     for (const key in botObject) {
@@ -109,8 +110,6 @@ async function editBot()
 
 async function changeImage(event)
 {
-    console.log(this.bot);
-
     const file = event.target.files[0];
 
     bot.value.image = await new Promise((resolve, reject) =>
@@ -125,19 +124,9 @@ async function changeImage(event)
     });
 }
 
-async function changeFile(event)
+function updateRivescripts(rivescripts)
 {
-    const file = event.target.files[0];
-
-    bot.value.script = await new Promise((resolve, reject) =>
-    {
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-            resolve(event.target.result);
-        };
-
-        reader.readAsText(file);
-    });
+    // Need to stringify the rivescripts object because it's an object and not a string
+    bot.value.rivescripts = JSON.stringify(rivescripts);
 }
 </script>
