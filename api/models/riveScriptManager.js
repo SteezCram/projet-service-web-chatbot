@@ -5,14 +5,7 @@ const databaseManager = require('./databaseManager')
 module.exports.createRiveScript = async function (riveScriptData) {
   let newRiveScriptID = -1
   try {
-    let riveScriptName = "Unnamed riveScript"
-    if (riveScriptData.name){
-      riveScriptName = riveScriptData.name
-    }
-    const riveScriptDescription = riveScriptData.description
-    const riveScriptScript = riveScriptData.script
-
-    newRiveScriptID = await databaseManager.createRiveScript(riveScriptName, riveScriptContent)
+    newRiveScriptID = await databaseManager.createRiveScript(riveScriptData.name, riveScriptData.content)
   } catch (err) {
     console.error(err)
   }

@@ -31,7 +31,7 @@
                 </div>
             </article>
 
-            <rivescript-manager class="mt-3"></rivescript-manager>
+            <rivescript-manager class="mt-5"></rivescript-manager>
 
             <btn-primary ref="submitButton" class="mt-10 !w-auto">
                 <i class="icon icon-logout"></i>

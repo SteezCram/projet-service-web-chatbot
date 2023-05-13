@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
     res.status(200).json()
   } catch (err) {
     console.log(`Error ${err} thrown`)
-    res.status(404).send('NOT FOUND')
+    res.sendStatus(500)
   }
 })
 
@@ -42,7 +42,7 @@ app.get('/users/:id', (req, res) => {
       res.status(200).json(userInformation)
     } catch (err) {
       console.log(`Error ${err} thrown`)
-      res.status(404).send('NOT FOUND')
+      res.sendStatus(500)
     }
   }
 })
@@ -61,7 +61,7 @@ app.post('/users', async (req, res) => {
     }
   } catch (err) {
     console.log(`Error ${err} thrown`)
-    res.status(404).send('NOT FOUND')
+    res.sendStatus(500)
   }
 })
 
@@ -80,7 +80,7 @@ app.post('/users/login', async (req, res) => {
     res.status(200).send({response: userInformation.id ? 0 : userInformation, user: {id:id, email:email, image:image, isAdmin:isAdmin, nickname:nickname}})
   } catch (err) {
     console.log(`Error ${err} thrown`)
-    res.status(404).send('NOT FOUND')
+    res.sendStatus(500)
   }
 })
 
@@ -99,7 +99,7 @@ app.delete('/users/:id', async (req, res) => {
       }
     } catch (err) {
       console.log(`Error ${err} thrown`)
-      res.status(404).send('NOT FOUND')
+      res.sendStatus(500)
     }
   }
 })
@@ -119,7 +119,7 @@ app.patch('/users/:id', async (req, res) => {
       res.sendStatus(200);
     } catch (err) {
       console.log(`Error ${err} thrown`)
-      res.status(404).send('NOT FOUND')
+      res.sendStatus(500)
     }
   }
 })
@@ -140,7 +140,7 @@ app.get('/bots/:id', async (req, res) => {
     }
   } catch (err) {
     console.log(`Error ${err} thrown`)
-    res.status(404).send('NOT FOUND')
+    res.sendStatus(500)
   }
 })
 
@@ -154,7 +154,7 @@ app.get('/bots', async (req, res) => {
     }
   } catch (err) {
     console.log(`Error ${err} thrown`)
-    res.status(404).send('NOT FOUND')
+    res.sendStatus(500)
   }
 })
 
@@ -173,7 +173,7 @@ app.post('/bots', async (req, res) => {
     res.status(200).send({id:newBotId})
   } catch (err) {
     console.log(`Error ${err} thrown`)
-    res.status(404).send('NOT FOUND')
+    res.sendStatus(500)
   }
 })
 
@@ -192,7 +192,7 @@ app.patch('/bots/:id', async (req, res) => {
       }
     } catch (err) {
       console.log(`Error ${err} thrown`)
-      res.status(404).send('NOT FOUND')
+      res.sendStatus(500)
     }
   }
 })
@@ -212,7 +212,7 @@ app.delete('/bots/:id', async (req, res) => {
       }
     } catch (err) {
       console.log(`Error ${err} thrown`)
-      res.status(404).send('NOT FOUND')
+      res.sendStatus(500)
     }
   }
 })
@@ -234,7 +234,23 @@ app.get('/rivescripts/:id', async (req, res) => {
     }
   } catch (err) {
     console.log(`Error ${err} thrown`)
-    res.status(404).send('NOT FOUND')
+    res.sendStatus(500)
+  }
+})
+
+app.get('/rivescripts/:id/download', async (req, res) => {
+  const id = req.params.id
+  try {
+    let rivescript = await riveScriptManager.getRiveScript(id)
+    //console.log(riveScript)
+    if (rivescript) {
+      res.status(200).send(Buffer.from(rivescript.content, 'utf-8'))
+    } else {
+      res.sendStatus(409)
+    }
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.sendStatus(500)
   }
 })
 
@@ -248,24 +264,22 @@ app.get('/rivescripts', async (req, res) => {
     }
   } catch (err) {
     console.log(`Error ${err} thrown`)
-    res.status(404).send('NOT FOUND')
+    res.sendStatus(500)
   }
 })
 
 app.post('/rivescripts', async (req, res) => {
   try {
-    const riveScriptData = {
-      name: req.body.name,
-      content: req.body.content,
-    }
-    newRiveScriptId = await riveScriptManager.createRiveScript(riveScriptData)
+    console.log(req.body)
+    const newRiveScriptId = await riveScriptManager.createRiveScript(req.body)
+    console.log(newRiveScriptId)
     if (!newRiveScriptId) {
-      throw "Couldn't create new rive script"
+      throw "Couldn't create new rive script";
     }
     res.status(200).send({id:newRiveScriptId})
   } catch (err) {
     console.log(`Error ${err} thrown`)
-    res.status(404).send('NOT FOUND')
+    res.sendStatus(500)
   }
 })
 
@@ -284,7 +298,7 @@ app.patch('/rivescripts/:id', async (req, res) => {
       }
     } catch (err) {
       console.log(`Error ${err} thrown`)
-      res.status(404).send('NOT FOUND')
+      res.sendStatus(500)
     }
   }
 })
@@ -304,7 +318,7 @@ app.delete('/rivescripts/:id', async (req, res) => {
       }
     } catch (err) {
       console.log(`Error ${err} thrown`)
-      res.status(404).send('NOT FOUND')
+      res.sendStatus(500)
     }
   }
 })
