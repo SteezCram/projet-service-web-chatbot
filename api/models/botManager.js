@@ -1,7 +1,6 @@
 const fs = require('fs')
 
 const RiveScript = require('rivescript')
-const tmp = require('tmp');
 
 const databaseManager = require('./databaseManager')
 const riveScriptManager = require('./riveScriptManager')
