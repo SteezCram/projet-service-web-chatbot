@@ -63,7 +63,7 @@ const originalBot = {
 
 async function editBot()
 {
-    if (bot.value.name.length === 0 || bot.value.description.length === 0 || bot.value.script.length === 0) {
+    if (bot.value.name.length === 0 || bot.value.description.length === 0 || bot.value.rivescripts.length === 0) {
         alert('Veuillez remplir tous les champs.');
         return;
     }

@@ -4,7 +4,7 @@
         <header-1 v-else class="mb-5">Fichier rivescripts</header-1>
 
         <form @submit.prevent="">
-            <div v-if="rivescripts.length > 0" class="rounded mb-2 grid grid-cols-1 lg:grid-cols-2 space-y-1 gap-2">
+            <div v-if="rivescripts.length > 0" class="rounded mb-2 grid grid-cols-1 lg:grid-cols-2 gap-2">
                 <article v-for="x in rivescripts" class="bg-gray-100 dark:bg-gray-900 rounded shadow">
                     <div class="px-4 py-2 flex flex-col">
                         <header-5 class="text-sm text-gray-900 dark:text-white mb-2">{{ x.name }}</header-5>

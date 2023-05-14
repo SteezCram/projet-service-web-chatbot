@@ -270,9 +270,7 @@ app.get('/rivescripts', async (req, res) => {
 
 app.post('/rivescripts', async (req, res) => {
   try {
-    console.log(req.body)
     const newRiveScriptId = await riveScriptManager.createRiveScript(req.body)
-    console.log(newRiveScriptId)
     if (!newRiveScriptId) {
       throw "Couldn't create new rive script";
     }
