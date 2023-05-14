@@ -271,3 +271,17 @@ module.exports.deleteRiveScript = async function (id) {
     return false
   }
 }
+
+module.exports.getBotsByRiveScript = async function (id) {
+  let result
+  try {
+    result = await database.all(`SELECT * FROM chatbot_bot`)
+    result = result.filter(bot => {
+      bot.rivescripts = JSON.parse(bot.rivescripts)
+      return bot.rivescripts.includes(id)
+    })
+  } catch (err) {
+    console.log(err)
+  }
+  return result
+}
