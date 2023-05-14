@@ -1,8 +1,29 @@
 <template>
-    <container-full class="relative !h-full">
+    <container-full class="relative h-full">
         <section style="height: calc(100% - 57.6px);" class="pb-5 overflow-y-auto">
             <container class="flex flex-col">
-                <div class="flex flex-row">
+                <div :class="`${x.is_bot ? 'flex flex-row' : 'flex flex-row mt-2 ml-auto'}`" v-for="x in discussions">
+                    <img v-if="x.is_bot " class="w-10 h-10 rounded-full mr-2" :src="bot_image">
+
+                    <article class="max-w-sm">
+                        <header-4 v-if="x.is_bot">{{ bot_name }}</header-4>
+                        <header-4 v-else class="text-right">{{ user_nickname }}</header-4>
+
+                        <p v-if="x.message !== '...'" class="text-justify">{{ x.message }}</p>
+                        <p v-else class="text-sm text-gray-500 text-justify">{{ bot_name }} écrit...</p>
+                    </article>
+
+                    <img v-if="!x.is_bot" class="w-10 h-10 rounded-full ml-2" :src="user_image">
+                </div>
+                <!-- <div v-else class="flex flex-row mt-2 ml-auto">
+                    <article class="max-w-sm">
+                        <header-4 class="text-right">{{ user_nickname }}</header-4>
+                        <p class="text-justify">{{ x.content }}</p>
+                    </article>
+
+                    <img class="w-10 h-10 rounded-full ml-2" :src="user_image">
+                </div> -->
+                <!-- <div class="flex flex-row">
                     <img class="w-10 h-10 rounded-full mr-2" :src="bot_image">
 
                     <article class="max-w-sm">
@@ -59,7 +80,7 @@
                     </article>
 
                     <img class="w-10 h-10 rounded-full ml-2" :src="user_image">
-                </div>          
+                </div> -->
             </container>
         </section>
 
@@ -98,10 +119,12 @@ if (!logged.value) {
 }
 
 
+const { data:bot } = await useFetch(`http://localhost:3001/bots/${useRoute().params.id}`);
+
 const submitButton = ref(null);
-const bot_id = useRoute().params.id;
-const bot_name = 'Jackie';
-const bot_image = 'https://api.dicebear.com/6.x/bottts/svg?seed=jackie';
+const bot_id = bot.value.id;
+const bot_name = bot.value.name;
+const bot_image = bot.value.image;
 const user_id = useCookie('user-id');
 const user_email = useCookie('user-email');
 const user_nickname = useCookie('user-nickname');
@@ -109,16 +132,73 @@ const user_isAdmin = useCookie('user-is-admin');
 const user_image = useCookie('user-image');
 const message = ref('');
 
+const { data:discussions } = await useFetch(`http://localhost:3001/discussions/${user_id.value}/${bot_id}`);
+
 
 async function sendMessage()
 {
-    submitButton.value.$el.disabled = true;
+    submitButton.value.disabled = true;
 
     if (message.value.length === 0) {
-        submitButton.value.$el.disabled = false;
+        submitButton.value.disabled = false;
         return;
     }
 
-    submitButton.value.$el.disabled = false;
+    discussions.value.push({
+        is_bot: false,
+        message: message.value,
+    });
+
+    const response = await fetch(`http://localhost:3001/discussions/${user_id.value}/${bot_id}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            is_bot: false,
+            message: message.value,
+        }),
+    });
+
+    if (!response.ok) {
+        discussions.value.pop();
+        alert('Une erreur est survenue lors de l\'envoi du message.');
+    }
+
+    submitButton.value.disabled = false;
+
+    receiveMessage();
+}
+
+async function receiveMessage()
+{
+    discussions.value.push({
+        is_bot: true,
+        message: '...',
+    });
+
+    const messageToSend = message.value;
+    message.value = '';
+
+    const response = await fetch(`http://localhost:3001/discussions/${user_id.value}/${bot_id}/reply`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            message: messageToSend,
+        }),
+    });
+
+    if (!response.ok) {
+        discussions.value.pop();
+        alert('Une erreur est survenue lors de la récéption du message.');
+    }
+    else {
+        const data = await response.json();
+        discussions.value[discussions.value.length - 1].message = data.message;
+    }
 }
 </script>

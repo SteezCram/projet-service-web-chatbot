@@ -18,25 +18,25 @@
 
                 <div class="flex flex-col w-full sm:w-1/2 md:w-3/5 lg:w-2/3 p-4">
                     <input-text class="mb-2" name="nickname" type="text" v-model="user.nickname" placeholder="John Doe" required>
-                        <template v-slot:label>
+                        <template #label>
                             Surnom
                         </template>
                     </input-text>
 
                     <input-text name="email" type="email" v-model="user.email" placeholder="name@company.com" required>
-                        <template v-slot:label>
+                        <template #label>
                             Adresse e-mail
                         </template>
                     </input-text>
 
                     <!-- <input-text name="password" type="password" v-model="password" required>
-                        <template v-slot:label>
+                        <template #label>
                             Nouveau mot de passe
                         </template>
                     </input-text>
                     
                     <input-text class="!mt-1" name="verifyPassword" type="password" v-model="verifyPassword" required>
-                        <template v-slot:label>
+                        <template #label>
                             Vérifier le mot de passe
                         </template>
                     </input-text> -->

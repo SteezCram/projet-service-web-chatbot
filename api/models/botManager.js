@@ -1,4 +1,13 @@
+const fs = require('fs')
+
+const RiveScript = require('rivescript')
+const tmp = require('tmp');
+
 const databaseManager = require('./databaseManager')
+const riveScriptManager = require('./riveScriptManager')
+
+
+let rivescriptBots = {}
 
 module.exports.createBot = async function (botData) {
   let newBotID = -1
@@ -66,6 +75,19 @@ module.exports.getBot = async function (id) {
   return dbRequest
 }
 
+module.exports.getBotRiveScripts = async function (id) {
+  let dbRequest
+  try {
+    dbRequest = await databaseManager.getBotRiveScripts(id)
+    if (!dbRequest) {
+      dbRequest = []
+    }
+  } catch (err) {
+    console.error(err)
+  }
+  return dbRequest
+}
+
 module.exports.deleteBot = async function (id) {
   let dbRequest
   try {
@@ -77,4 +99,39 @@ module.exports.deleteBot = async function (id) {
     console.error(err)
   }
   return dbRequest
+}
+
+module.exports.isBotRunning = function (bot_id) {
+  if (rivescriptBots[bot_id]) return true
+  return false
+}
+
+module.exports.startBot = async function (bot_id) {
+  const botRiveScripts = await this.getBotRiveScripts(bot_id)
+  if (!botRiveScripts) {
+    return false
+  }
+
+  const bot = new RiveScript()
+
+  for (const riveScript of botRiveScripts) {
+    bot.stream((await riveScriptManager.getRiveScript(riveScript)).content)
+  }
+
+  bot.sortReplies()
+
+  rivescriptBots[bot_id] = bot
+}
+
+module.exports.stopBot = function (bot_id) {
+  delete rivescriptBots[bot_id]
+}
+
+module.exports.getBotReply = function (bot_id, user_id, message) {
+  const bot = rivescriptBots[bot_id]
+  if (!bot) {
+    return false
+  }
+
+  return bot.reply(user_id, message)
 }

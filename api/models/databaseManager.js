@@ -16,7 +16,6 @@ const dbPATH = '../database.db';
 
 
 
-
 // chatbot_user
 
 module.exports.getUser = async function (email) {
@@ -95,7 +94,6 @@ module.exports.updateUserAccount = async function (id, key, value) {
 
 
 
-
 // chatbot_bot
 
 module.exports.getBots = async function () {
@@ -117,6 +115,17 @@ module.exports.getBot = async function (id) {
   try {
     result = await database.get(`SELECT * FROM chatbot_bot WHERE id= ?`, id)
     result.rivescripts = JSON.parse(result.rivescripts)
+  } catch (err) {
+    console.log(err)
+  }
+  return result
+}
+
+module.exports.getBotRiveScripts = async function (id) {
+  let result
+  try {
+    result = await database.get(`SELECT rivescripts FROM chatbot_bot WHERE id= ?`, id)
+    result = JSON.parse(result.rivescripts)
   } catch (err) {
     console.log(err)
   }
@@ -162,6 +171,45 @@ module.exports.deleteBot = async function (id) {
   }
 }
 
+
+
+//chatbot_discussion
+
+module.exports.getDiscussions = async function (user_id) {
+  let result
+  try {
+    result = await database.all(`SELECT DISTINCT(bot_id) FROM chatbot_discussion WHERE user_id= ?`, user_id)
+  } catch (err) {
+    console.log(err)
+  }
+  return result
+}
+
+module.exports.getDiscussion = async function (user_id, bot_id) {
+  let result
+  try {
+    result = await database.all(`SELECT * FROM chatbot_discussion WHERE user_id= ? AND bot_id= ? ORDER BY timestamp`, [user_id, bot_id])
+  } catch (err) {
+    console.log(err)
+  }
+  return result
+}
+
+module.exports.addMessage = async function (user_id, bot_id, messageData) {
+  try {
+    await database.run('INSERT INTO chatbot_discussion (user_id, bot_id, is_bot, message, timestamp) VALUES (?, ?, ?, ?, ?)', [
+      user_id,
+      bot_id,
+      messageData.is_bot,
+      messageData.message,
+      Date.now(),
+    ])
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
 
 
 

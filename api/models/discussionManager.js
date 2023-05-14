@@ -1,0 +1,40 @@
+const databaseManager = require('./databaseManager')
+
+module.exports.getDiscussions = async function (user_id) {
+    let dbRequest
+    try {
+        dbRequest = await databaseManager.getDiscussions(user_id)
+        if (!dbRequest) {
+            dbRequest = []
+        }
+    } catch (err) {
+        console.error(err)
+    }
+    return dbRequest
+}
+
+module.exports.getDiscussion = async function (user_id, bot_id) {
+    let dbRequest
+    try {
+        dbRequest = await databaseManager.getDiscussion(user_id, bot_id)
+        if (!dbRequest) {
+            dbRequest = []
+        }
+    } catch (err) {
+        console.error(err)
+    }
+    return dbRequest
+}
+
+module.exports.addMessage = async function (user_id, bot_id, messageData) {
+    let dbRequest
+    try {
+        dbRequest = await databaseManager.addMessage(user_id, bot_id, messageData)
+        if (!dbRequest) {
+            dbRequest = []
+        }
+    } catch (err) {
+        console.error(err)
+    }
+    return dbRequest
+}

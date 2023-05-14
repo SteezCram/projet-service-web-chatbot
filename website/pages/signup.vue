@@ -9,25 +9,25 @@
 
                     <form @submit.prevent="signup($event)" class="space-y-4 md:space-y-6" action="#">
                         <input-text name="email" type="email" v-model="email" placeholder="name@company.com" required>
-                            <template v-slot:label>
+                            <template #label>
                                 Adresse e-mail
                             </template>
                         </input-text>
 
                         <input-text name="nickname" type="text" v-model="nickname" placeholder="John Doe" required>
-                            <template v-slot:label>
+                            <template #label>
                                 Surnom
                             </template>
                         </input-text>
                         
                         <input-text name="password" type="password" v-model="password" required>
-                            <template v-slot:label>
+                            <template #label>
                                 Mot de passe
                             </template>
                         </input-text>
                         
                         <input-text class="!mt-1" name="verifyPassword" type="password" v-model="verifyPassword" required>
-                            <template v-slot:label>
+                            <template #label>
                                 Vérifier le mot de passe
                             </template>
                         </input-text>

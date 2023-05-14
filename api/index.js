@@ -2,6 +2,7 @@ const PORT_SERVER = 3001
 
 const userAccount = require('./models/userAccount')
 const botManager = require('./models/botManager')
+const discussionManager = require('./models/discussionManager')
 const riveScriptManager = require('./models/riveScriptManager')
 
 const express = require('express')
@@ -217,6 +218,80 @@ app.delete('/bots/:id', async (req, res) => {
   }
 })
 
+
+
+// Discussions
+
+app.get('/discussions/:user_id', async (req, res) => {
+  const user_id = req.params.user_id
+  try {
+    let discussions = await discussionManager.getDiscussions(user_id)
+    for (let i = 0; i < discussions.length; i++) {
+      discussions[i] = await botManager.getBot(discussions[i].bot_id)
+    }
+    //console.log(discussions)
+    if (discussions) {
+      res.status(200).send(discussions)
+    } else {
+      res.sendStatus(409)
+    }
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.sendStatus(500)
+  }
+})
+
+app.get('/discussions/:user_id/:bot_id', async (req, res) => {
+  const user_id = req.params.user_id
+  const bot_id = req.params.bot_id
+  try {
+    let discussion = await discussionManager.getDiscussion(user_id, bot_id)
+    if (discussion) {
+      res.status(200).send(discussion)
+      // Start the bot
+      if (!botManager.isBotRunning(bot_id)) botManager.startBot(bot_id);
+    } else {
+      res.sendStatus(409)
+    }
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.sendStatus(500)
+  }
+})
+
+app.post('/discussions/:user_id/:bot_id', async (req, res) => {
+  const user_id = req.params.user_id
+  const bot_id = req.params.bot_id
+  try {
+    let discussion = await discussionManager.addMessage(user_id, bot_id, req.body)
+    //console.log(discussion)
+    if (discussion) {
+      res.status(200).send(discussion)
+    } else {
+      res.sendStatus(409)
+    }
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.sendStatus(500)
+  }
+})
+
+app.post('/discussions/:user_id/:bot_id/reply', async (req, res) => {
+  const user_id = req.params.user_id
+  const bot_id = req.params.bot_id
+  try {
+    let reply = await botManager.getBotReply(bot_id, user_id, req.body.message)
+    if (reply) {
+      res.status(200).send({message: reply})
+      await discussionManager.addMessage(user_id, bot_id, {is_bot: true, message: reply})
+    } else {
+      res.sendStatus(409)
+    }
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.sendStatus(500)
+  }
+})
 
 
 

@@ -11,9 +11,9 @@
 
         <section class="grid grid-cols-1 xl:grid-cols-2 gap-4">
             <user-card v-for="x in bots" :image="x.image">
-                <template v-slot:header>{{ x.name }}</template>
-                <template v-slot:description>{{ x.description }}</template>
-                <template v-slot:actions>
+                <template #header>{{ x.name }}</template>
+                <template #description>{{ x.description }}</template>
+                <template #actions>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <btn-primary class="!w-auto" @click="$router.push(`/admin/bots/edit/${x.id}`)">
                             <i class="icon icon-edit"></i>

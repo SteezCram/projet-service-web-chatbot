@@ -18,13 +18,13 @@
 
                 <div class="flex flex-col w-full sm:w-1/2 md:w-3/5 lg:w-2/3 p-4">
                     <input-text class="mb-2" name="nickname" type="text" v-model="bot.name" placeholder="John Doe" required>
-                        <template v-slot:label>
+                        <template #label>
                             Nom du bot
                         </template>
                     </input-text>
 
                     <input-text class="mt-2" type="text" name="description" v-model="bot.description" required>
-                        <template v-slot:label>
+                        <template #label>
                             Description du bot
                         </template>
                     </input-text>

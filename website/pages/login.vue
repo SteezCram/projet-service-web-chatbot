@@ -9,13 +9,13 @@
 
                     <form @submit.prevent="login($event)" class="space-y-4 md:space-y-6" action="#">
                         <input-text name="email" type="email" v-model="email" placeholder="name@company.com" required>
-                            <template v-slot:label>
+                            <template #label>
                                 Adresse e-mail
                             </template>
                         </input-text>
                         
                         <input-text name="password" type="password" v-model="password" required>
-                            <template v-slot:label>
+                            <template #label>
                                 Mot de passe
                             </template>
                         </input-text>

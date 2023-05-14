@@ -3,9 +3,9 @@
         <header-1 class="mb-5">Paramètres de votre compte</header-1>
 
         <user-card :image="user_image">
-            <template v-slot:header>{{ user_nickname }}</template>
-            <template v-slot:description>{{ user_email }}</template>
-            <template v-slot:actions>
+            <template #header>{{ user_nickname }}</template>
+            <template #description>{{ user_email }}</template>
+            <template #actions>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                     <btn-primary class="!w-auto" @click="$router.push('/dashboard/user/edit')">
                         <i class="icon icon-edit"></i>
