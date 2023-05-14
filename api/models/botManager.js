@@ -40,6 +40,14 @@ module.exports.updateBot = async function (id, botData) {
       if (!res) {
         return false
       }
+
+      // Reload bot if rivescripts changed
+      if (key === 'rivescripts') {
+        if (this.isBotRunning(id)) {
+          this.stopBot(id)
+          this.startBot(id)
+        }
+      }
     }
     return true
   } catch (err) {
