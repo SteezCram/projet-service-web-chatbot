@@ -1,13 +1,19 @@
 <template>
     <container-full class="relative h-full">
-        <section style="height: calc(100% - 57.6px);" class="pb-5 overflow-y-auto">
+        <section ref="discussionSection" style="height: calc(100% - 57.6px);" class="pb-5 overflow-y-auto">
             <container class="flex flex-col">
                 <div :class="`${x.is_bot ? 'flex flex-row' : 'flex flex-row mt-2 ml-auto'}`" v-for="x in discussions">
                     <img v-if="x.is_bot " class="w-10 h-10 rounded-full mr-2" :src="bot_image">
 
                     <article class="max-w-sm">
-                        <header-4 v-if="x.is_bot">{{ bot_name }}</header-4>
-                        <header-4 v-else class="text-right">{{ user_nickname }}</header-4>
+                        <header-4 v-if="x.is_bot" class="flex flex-row items-baseline">
+                            {{ bot_name }}
+                            <span class="ml-2 text-xs text-gray-500">{{ new Date(x.timestamp).toLocaleString() }}</span>
+                        </header-4>
+                        <header-4 v-else class="text-right flex flex-row-reverse items-baseline">
+                            {{ user_nickname }}
+                            <span class="mr-2 text-xs text-gray-500">{{ new Date(x.timestamp).toLocaleString() }}</span>
+                        </header-4>
 
                         <p v-if="x.message !== '...'" class="text-justify">{{ x.message }}</p>
                         <p v-else class="text-sm text-gray-500 text-justify">{{ bot_name }} écrit...</p>
@@ -122,6 +128,7 @@ if (!logged.value) {
 const { data:bot } = await useFetch(`http://localhost:3001/bots/${useRoute().params.id}`);
 
 const submitButton = ref(null);
+const discussionSection = ref(null);
 const bot_id = bot.value.id;
 const bot_name = bot.value.name;
 const bot_image = bot.value.image;
@@ -133,6 +140,15 @@ const user_image = useCookie('user-image');
 const message = ref('');
 
 const { data:discussions } = await useFetch(`http://localhost:3001/discussions/${user_id.value}/${bot_id}`);
+
+
+onMounted(() => {
+    scrollDiscussionToBottom();
+});
+
+function scrollDiscussionToBottom() {
+    discussionSection.value.scrollTo(0, discussionSection.value.scrollHeight);
+}
 
 
 async function sendMessage()
@@ -147,6 +163,7 @@ async function sendMessage()
     discussions.value.push({
         is_bot: false,
         message: message.value,
+        timestamp: Date.now(),
     });
 
     const response = await fetch(`http://localhost:3001/discussions/${user_id.value}/${bot_id}`, {
@@ -166,6 +183,7 @@ async function sendMessage()
         alert('Une erreur est survenue lors de l\'envoi du message.');
     }
 
+    scrollDiscussionToBottom();
     submitButton.value.disabled = false;
 
     receiveMessage();
@@ -176,6 +194,7 @@ async function receiveMessage()
     discussions.value.push({
         is_bot: true,
         message: '...',
+        timestamp: Date.now(),
     });
 
     const messageToSend = message.value;
@@ -199,6 +218,7 @@ async function receiveMessage()
     else {
         const data = await response.json();
         discussions.value[discussions.value.length - 1].message = data.message;
+        scrollDiscussionToBottom();
     }
 }
 </script>
