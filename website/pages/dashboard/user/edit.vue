@@ -17,13 +17,13 @@
                 </div>
 
                 <div class="flex flex-col w-full sm:w-1/2 md:w-3/5 lg:w-2/3 p-4">
-                    <input-text class="mb-2" name="nickname" type="text" v-model="user.nickname" placeholder="John Doe" required>
+                    <input-text class="mb-2" name="nickname" type="text" v-model.trim="user.nickname" placeholder="John Doe" required>
                         <template #label>
                             Surnom
                         </template>
                     </input-text>
 
-                    <input-text name="email" type="email" v-model="user.email" placeholder="name@company.com" required>
+                    <input-text name="email" type="email" v-model.trim="user.email" placeholder="name@company.com" required>
                         <template #label>
                             Adresse e-mail
                         </template>

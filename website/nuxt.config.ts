@@ -16,7 +16,7 @@ export default defineNuxtConfig({
     },
     build: {
         transpile: [
-            '@joeattardi/emoji-button',
+            'picmo',
         ],
     }
 })
