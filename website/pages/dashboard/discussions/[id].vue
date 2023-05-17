@@ -34,7 +34,7 @@
                         <span class="sr-only">Ajouter un emoji</span>
                     </button>
 
-                    <textarea v-model="message" rows="1" class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-green-500 focus:border-primary-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" :placeholder="`Envoyer un message à ${bot_name}`"></textarea>
+                    <textarea @keypress="enterKeyHandler($event)" v-model="message" rows="1" class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-green-500 focus:border-primary-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" :placeholder="`Envoyer un message à ${bot_name}`"></textarea>
                     
                     <button ref="submitButton" type="submit" class="inline-flex justify-center p-2 text-primary-600 rounded-full cursor-pointer hover:bg-primary-100 dark:text-primary-100 dark:hover:bg-primary-600">
                         <svg aria-hidden="true" class="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
@@ -79,6 +79,17 @@ function scrollDiscussionToBottom() {
     discussionSection.value.scrollTo(0, discussionSection.value.scrollHeight);
 }
 
+
+function enterKeyHandler(event) {
+    if (event.which === 13 && !event.shiftKey) {
+        if (!event.repeat) {
+            const newEvent = new Event("submit", { cancelable: true });
+            event.target.form.dispatchEvent(newEvent);
+        }
+
+        event.preventDefault();
+    }
+}
 
 async function sendMessage()
 {
