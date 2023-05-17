@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@joeattardi/emoji-button": "^4.6.4",
     "autoprefixer": "^10.4.14",
     "file-saver": "^2.0.5",
     "nuxt": "^3.3.3",
