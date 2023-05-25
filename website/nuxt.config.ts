@@ -13,5 +13,10 @@ export default defineNuxtConfig({
     },
     routeRules: {
         '/**': { cors: true, ssr: true },
+    },
+    build: {
+        transpile: [
+            'picmo',
+        ],
     }
 })
