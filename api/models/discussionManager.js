@@ -26,6 +26,16 @@ module.exports.getDiscussion = async function (user_id, bot_id) {
     return dbRequest
 }
 
+module.exports.deleteDiscussion = async function (user_id, bot_id) {
+    try {
+        await databaseManager.deleteDiscussion(user_id, bot_id)
+        return true;
+    } catch (err) {
+        console.error(err)
+        return false;
+    }
+}
+
 module.exports.addMessage = async function (user_id, bot_id, messageData) {
     let dbRequest
     try {

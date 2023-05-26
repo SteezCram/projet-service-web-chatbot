@@ -276,6 +276,22 @@ app.post('/discussions/:user_id/:bot_id', async (req, res) => {
   }
 })
 
+app.delete('/discussions/:user_id/:bot_id', async (req, res) => {
+  const user_id = req.params.user_id
+  const bot_id = req.params.bot_id
+  try {
+    let goodDeletion = await discussionManager.deleteDiscussion(user_id, bot_id)
+    if (goodDeletion) {
+      res.sendStatus(200)
+    } else {
+      res.sendStatus(409)
+    }
+  } catch (err) {
+    console.log(`Error ${err} thrown`)
+    res.sendStatus(500)
+  }
+})
+
 app.post('/discussions/:user_id/:bot_id/reply', async (req, res) => {
   const user_id = req.params.user_id
   const bot_id = req.params.bot_id

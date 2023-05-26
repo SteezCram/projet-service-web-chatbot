@@ -21,10 +21,17 @@
                 <template #header>{{ x.name }}</template>
                 <template #description>{{ x.description }}</template>
                 <template #actions>
-                    <btn-primary class="!w-auto" @click="$router.push(`/dashboard/discussions/${x.id}`)">
-                        <i class="icon icon-external-link"></i>
-                        Reprendre la discussion
-                    </btn-primary>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <btn-primary class="!w-auto" @click="$router.push(`/dashboard/discussions/${x.id}`)">
+                            <i class="icon icon-external-link"></i>
+                            Reprendre la discussion
+                        </btn-primary>
+
+                        <btn-delete class="!w-auto" @click="deleteDiscussion(x.id);">
+                            <i class="icon icon-trash"></i>
+                            Supprimer la discussion
+                        </btn-delete>
+                    </div>
                 </template>
             </user-card>
         </section>
@@ -42,5 +49,25 @@ if (!logged.value) {
 const user_id = useCookie('user-id');
 const user_nickname = useCookie('user-nickname');
 
-const { data:bots } = await useFetch(`http://localhost:3001/discussions/${user_id.value}`);
+const { data:bots, pending, refresh, error } = await useFetch(`http://localhost:3001/discussions/${user_id.value}`);
+
+
+async function deleteDiscussion(bot_id)
+{
+    if (!confirm('Voulez-vous supprimer la discussion avec ce bot ? Cette opération est irréversible.')) {
+        return;
+    }
+
+    const response = await fetch(`http://localhost:3001/discussions/${user_id.value}/${bot_id}`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        alert('Une erreur est survenue lors de la suppression de la discussion.');
+        return;
+    }
+
+    // Refresh the data
+    refresh();
+}
 </script>

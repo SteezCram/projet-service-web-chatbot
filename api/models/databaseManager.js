@@ -195,6 +195,17 @@ module.exports.getDiscussion = async function (user_id, bot_id) {
   return result
 }
 
+module.exports.deleteDiscussion = async function (user_id, bot_id) {
+  try {
+    await database.run('DELETE FROM chatbot_discussion WHERE user_id = ? AND bot_id = ?', [user_id, bot_id])
+    await database.run('DELETE FROM chatbot_discussion_variables WHERE user_id = ? AND bot_id = ?', [user_id, bot_id])
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
+
 module.exports.addMessage = async function (user_id, bot_id, messageData) {
   try {
     await database.run('INSERT INTO chatbot_discussion (user_id, bot_id, is_bot, message, timestamp) VALUES (?, ?, ?, ?, ?)', [

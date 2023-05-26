@@ -126,7 +126,6 @@ module.exports.setBotVariables = async function (bot_id, user_id) {
   }
 
   for (const key in variables) {
-    console.log(key, variables[key])
     await bot.setUservar(user_id, key, variables[key])
   }
 

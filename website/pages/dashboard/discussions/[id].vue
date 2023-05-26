@@ -106,7 +106,7 @@ const user_isAdmin = useCookie('user-is-admin');
 const user_image = useCookie('user-image');
 const message = ref('');
 const emojiButton = ref(null);
-const emojiRegex = /\p{Emoji_Presentation}/u;
+const emojiRegex = /\p{Emoji_Presentation}/u; // Regex to check if a string contains an emoji
 
 const { data:discussions } = await useFetch(`http://localhost:3001/discussions/${user_id.value}/${bot_id}`);
 let picker = ref(null);
