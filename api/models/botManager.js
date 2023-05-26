@@ -113,6 +113,19 @@ module.exports.isBotRunning = function (bot_id) {
   return false
 }
 
+module.exports.setBotVariables = async function (bot_id, user_id) {
+  let bot = rivescriptBots[bot_id]
+  if (!bot) {
+    return false
+  }
+
+  for (const key in variables) {
+    await bot.setUservar(user_id, key, variables[key])
+  }
+
+  return true
+}
+
 module.exports.startBot = async function (bot_id) {
   const botRiveScripts = await this.getBotRiveScripts(bot_id)
   if (!botRiveScripts) {
@@ -134,11 +147,19 @@ module.exports.stopBot = function (bot_id) {
   delete rivescriptBots[bot_id]
 }
 
-module.exports.getBotReply = function (bot_id, user_id, message) {
-  const bot = rivescriptBots[bot_id]
+module.exports.getBotReply = async function (bot_id, user_id, message) {
+  let bot = rivescriptBots[bot_id]
   if (!bot) {
-    return false
+    await this.startBot(bot_id)
+    bot = rivescriptBots[bot_id]
   }
 
-  return bot.reply(user_id, message)
+  const reply = await bot.reply(user_id, message)
+  let vars = await bot.getUservars(user_id)
+  const filtered = Object.entries(vars).filter(([k, v]) => k !== 'topic' && !k.startsWith('__'))
+  vars = Object.fromEntries(filtered)
+  // We have the users variables now, we can save them to the database
+  //await databaseManager.updateUserAccount(user_id, 'variables', JSON.stringify(vars))
+
+  return reply
 }

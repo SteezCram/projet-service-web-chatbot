@@ -1,5 +1,5 @@
 <template>
-    <contaier-full class="!h-full flex">
+    <container-full class="!h-full flex">
         <container class="flex flex-col m-auto">
             <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
                 Un nouveau <span class="text-primary-600 dark:text-primary-500">monde de conversation intelligente</span> avec nos chatbots.
@@ -15,7 +15,7 @@
                 </btn-primary>
             </div>
         </container>
-    </contaier-full>
+    </container-full>
 </template>
 
 <script setup>

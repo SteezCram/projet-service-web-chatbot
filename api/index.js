@@ -250,6 +250,7 @@ app.get('/discussions/:user_id/:bot_id', async (req, res) => {
       res.status(200).send(discussion)
       // Start the bot
       if (!botManager.isBotRunning(bot_id)) botManager.startBot(bot_id);
+      botManager.setBotVariables(bot_id, user_id);
     } else {
       res.sendStatus(409)
     }

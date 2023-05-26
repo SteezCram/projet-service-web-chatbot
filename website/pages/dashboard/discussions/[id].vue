@@ -106,13 +106,13 @@ const user_isAdmin = useCookie('user-is-admin');
 const user_image = useCookie('user-image');
 const message = ref('');
 const emojiButton = ref(null);
-const emojiRegex = /\p{Emoji}/u;
+const emojiRegex = /\p{Emoji_Presentation}/u;
 
 const { data:discussions } = await useFetch(`http://localhost:3001/discussions/${user_id.value}/${bot_id}`);
 let picker = ref(null);
 
 onMounted(() => {
-    scrollDiscussionToBottom();
+    scrollDiscussionToBottom(350); // Need a timeout since the page transition break the scroll
 
     picker = createPopup({
         i18n: i18n.fr,
@@ -131,8 +131,15 @@ function addEmoji() {
     picker.open();
 }
 
-function scrollDiscussionToBottom() {
-    discussionSection.value.scrollTo(0, discussionSection.value.scrollHeight);
+function scrollDiscussionToBottom(timeout = 0) {
+    if (timeout === 0) {
+        discussionSection.value.scrollTo(0, discussionSection.value.scrollHeight);
+        return;
+    }
+
+    setTimeout(() => {
+        discussionSection.value.scrollTo(0, discussionSection.value.scrollHeight);
+    }, timeout);
 }
 
 function enterKeyHandler(event)
