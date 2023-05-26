@@ -8,7 +8,8 @@
             <p class="text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">Découvrez un monde de conversation intelligente avec notre site de discussion de chatbot, où l'intelligence artificielle rencontre l'interaction humaine pour des expériences uniques et engageantes !</p>
         
             <div class="flex flex-row justify-center">
-                <btn-primary class="!w-auto mt-10 flex flex-row justify-center items-baseline">
+                <btn-primary class="!w-auto mt-10 flex flex-row justify-center items-baseline"
+                             @click="$router.push(logged ? '/dashboard' : '/login')">
                     Démarrer maintenant
                     <i class="ml-1 icon icon-arrow-right"></i>
                 </btn-primary>
@@ -16,3 +17,8 @@
         </container>
     </contaier-full>
 </template>
+
+<script setup>
+// Prevent access to this page if the user is not logged in
+const logged = useCookie('user-id');
+</script>
