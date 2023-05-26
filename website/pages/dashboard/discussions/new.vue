@@ -10,7 +10,7 @@
         </div>
 
         <section class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-            <user-card v-for="x in bots" :image="x.image">
+            <user-card v-if="bots.length > 0" v-for="x in bots" :image="x.image">
                 <template #header>{{ x.name }}</template>
                 <template #description>{{ x.description }}</template>
                 <template #actions>
@@ -20,6 +20,14 @@
                             Sélectionner
                         </btn-primary>
                     </div>
+                </template>
+            </user-card>
+
+            <user-card v-else image="/img/system.png">
+                <template #header>Système</template>
+                <template #description>Le bot système du site</template>
+                <template #actions>
+                    Aucun bot n'a été trouvé pour engager une nouvelle discussion avec vous. Si vous voulez rediscuter de nouveau avec un bot pensez à supprimer la conversation existante.
                 </template>
             </user-card>
         </section>
