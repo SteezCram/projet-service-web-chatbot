@@ -12,6 +12,8 @@ const dbPATH = '../database.db';
     filename: dbPATH,
     driver: sqlite3.Database
   })
+  // enable foreign keys
+  await database.run('PRAGMA foreign_keys = ON')
 })()
 
 
