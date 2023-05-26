@@ -247,10 +247,10 @@ app.get('/discussions/:user_id/:bot_id', async (req, res) => {
   try {
     let discussion = await discussionManager.getDiscussion(user_id, bot_id)
     if (discussion) {
-      res.status(200).send(discussion)
       // Start the bot
       if (!botManager.isBotRunning(bot_id)) botManager.startBot(bot_id);
       botManager.setBotVariables(bot_id, user_id);
+      res.status(200).send(discussion)
     } else {
       res.sendStatus(409)
     }
@@ -265,7 +265,6 @@ app.post('/discussions/:user_id/:bot_id', async (req, res) => {
   const bot_id = req.params.bot_id
   try {
     let discussion = await discussionManager.addMessage(user_id, bot_id, req.body)
-    //console.log(discussion)
     if (discussion) {
       res.status(200).send(discussion)
     } else {
