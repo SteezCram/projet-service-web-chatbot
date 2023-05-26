@@ -215,6 +215,9 @@ module.exports.getDiscussionVariables = async function (user_id, bot_id) {
   let result
   try {
     result = await database.get('SELECT variables FROM chatbot_discussion_variables WHERE user_id = ? AND bot_id = ?', [user_id, bot_id])
+    if (!result) {
+      return {}
+    }
     result = JSON.parse(result.variables)
   } catch (err) {
     console.log(err)
