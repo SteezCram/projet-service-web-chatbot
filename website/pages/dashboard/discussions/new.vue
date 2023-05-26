@@ -34,5 +34,11 @@ if (!logged.value) {
 }
 
 
-const { data: bots, pending, refresh, error } = await useFetch(`http://localhost:3001/bots`);
+const user_id = useCookie('user-id');
+
+const { data: bots } = await useFetch(`http://localhost:3001/bots`);
+const { data:discussions } = await useFetch(`http://localhost:3001/discussions/${user_id.value}`);
+
+// Filter the bots that are already in a discussion for the current user
+bots.value = bots.value.filter(x => !discussions.value.find(y => y.id === x.id));
 </script>

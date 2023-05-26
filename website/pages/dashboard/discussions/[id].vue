@@ -1,8 +1,22 @@
 <template>
     <container-full class="relative h-full">
+        <!-- <div class="absolute top-0 left-0 w-full bg-gray-100 dark:bg-gray-900 rounded-b-lg shadow-md">
+            <container class="!min-h-0 flex flex-row items-center px-3 py-2">
+                <img class="w-10 h-10 rounded-full mr-2" :src="bot_image">
+
+                <div class="flex flex-col">
+                    <header-4 class="flex flex-row items-baseline">
+                        {{ bot_name }}
+                    </header-4>
+
+                    <span class="text-sm text-gray-500">{{ bot_description }}</span>
+                </div>
+            </container>
+        </div> -->
+
         <section ref="discussionSection" style="height: calc(100% - 57.6px);" class="pb-5 overflow-y-auto">
             <container class="flex flex-col">
-                <div :class="`${x.is_bot ? 'flex flex-row' : 'flex flex-row mt-2 ml-auto'}`" v-for="x in discussions">
+                <div v-if="discussions.length > 0" :class="`${x.is_bot ? 'flex flex-row' : 'flex flex-row mt-2 ml-auto'}`" v-for="x in discussions">
                     <img v-if="x.is_bot " class="w-10 h-10 rounded-full mr-2" :src="bot_image">
 
                     <article class="max-w-sm">
@@ -21,6 +35,25 @@
                     </article>
 
                     <img v-if="!x.is_bot" class="w-10 h-10 rounded-full ml-2" :src="user_image">
+                </div>
+
+                <div v-else class="flex flex-row">
+                    <img class="w-10 h-10 rounded-full mr-2" src="/img/system.png">
+
+                    <article class="max-w-sm">
+                        <header-4 class="flex flex-row items-baseline">
+                            Système
+                            <span class="ml-2 text-xs text-gray-500">{{ new Date().toLocaleString() }}</span>
+                        </header-4>
+
+                        <p class="text-justify">
+                            Envoyer votre premier message à 
+                            <span>
+                                <img class="w-5 h-5 rounded-full inline mr-1" :src="bot_image">
+                                <span class="font-semibold">{{ bot_name }}</span>
+                            </span>
+                            pour créer la discussion.</p>
+                    </article>
                 </div>
             </container>
         </section>
@@ -65,6 +98,7 @@ const discussionSection = ref(null);
 const bot_id = bot.value.id;
 const bot_name = bot.value.name;
 const bot_image = bot.value.image;
+const bot_description = bot.value.description;
 const user_id = useCookie('user-id');
 const user_email = useCookie('user-email');
 const user_nickname = useCookie('user-nickname');
