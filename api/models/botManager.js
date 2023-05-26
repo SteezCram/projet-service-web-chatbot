@@ -74,7 +74,7 @@ module.exports.getBot = async function (id) {
   try {
     dbRequest = await databaseManager.getBot(id)
     if (!dbRequest) {
-        dbRequest = {}
+      dbRequest = {}
     }
   } catch (err) {
     console.error(err)
