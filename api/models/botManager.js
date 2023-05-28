@@ -39,7 +39,7 @@ module.exports.createBot = async function (botData) {
 }
 
 /**
- * Update a Bot attributes
+ * Update Bot attributes
  * @param {Number} id 
  * @param {Array} botData 
  * @returns Bot update success as a Boolean
@@ -68,8 +68,8 @@ module.exports.updateBot = async function (id, botData) {
 }
 
 /**
- * Get all the bots
- * @returns An array of Bots
+ * Get all the Bots
+ * @returns Array of Bots
  */
 module.exports.getAll = async function () {
   let dbRequest
@@ -121,7 +121,7 @@ module.exports.getBotRiveScripts = async function (id) {
 }
 
 /**
- * Delete a Bot with "id"
+ * Delete Bot with "id"
  * @param {Number} id 
  * @returns Deletion success
  */

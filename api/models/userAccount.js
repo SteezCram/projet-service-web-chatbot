@@ -35,7 +35,7 @@ module.exports.createAccount = async function (email, plainPassword, nickname) {
 }
 
 /**
- * Delete an Account with "id"
+ * Delete Account with "id"
  * @param {Number} id 
  * @returns Deletion success
  */
@@ -49,7 +49,7 @@ module.exports.deleteAccount = async function (id) {
 }
 
 /**
- * Update an Account attributes
+ * Update Account attributes
  * @param {Number} id 
  * @param {Array} data 
  * @returns Account update success as a Boolean
