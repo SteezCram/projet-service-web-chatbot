@@ -1,5 +1,10 @@
 const databaseManager = require('./databaseManager')
 
+/**
+ * Get the Discussions of User with "user_id"
+ * @param {Number} user_id 
+ * @returns Array of Discussions
+ */
 module.exports.getDiscussions = async function (user_id) {
     let dbRequest
     try {
@@ -13,6 +18,12 @@ module.exports.getDiscussions = async function (user_id) {
     return dbRequest
 }
 
+/**
+ * Get the Discussion between "user_id" and "bot_id"
+ * @param {Number} user_id 
+ * @param {Number} bot_id 
+ * @returns Discussion
+ */
 module.exports.getDiscussion = async function (user_id, bot_id) {
     let dbRequest
     try {
@@ -26,6 +37,12 @@ module.exports.getDiscussion = async function (user_id, bot_id) {
     return dbRequest
 }
 
+/**
+ * Delete the Discussion between "user_id" and "bot_id"
+ * @param {*} user_id 
+ * @param {*} bot_id 
+ * @returns Deletion success as a Boolean
+ */
 module.exports.deleteDiscussion = async function (user_id, bot_id) {
     try {
         await databaseManager.deleteDiscussion(user_id, bot_id)
@@ -36,6 +53,13 @@ module.exports.deleteDiscussion = async function (user_id, bot_id) {
     }
 }
 
+/**
+ * Add a new message to the Discussion between "user_id" and "bot_id"
+ * @param {Number} user_id 
+ * @param {Number} bot_id 
+ * @param {Message} messageData 
+ * @returns Update success
+ */
 module.exports.addMessage = async function (user_id, bot_id, messageData) {
     let dbRequest
     try {

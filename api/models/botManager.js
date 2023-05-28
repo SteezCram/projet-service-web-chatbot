@@ -42,7 +42,7 @@ module.exports.createBot = async function (botData) {
  * Update a Bot attributes
  * @param {Number} id 
  * @param {Array} botData 
- * @returns Bot update success as a boolean
+ * @returns Bot update success as a Boolean
  */
 module.exports.updateBot = async function (id, botData) {
   try {
