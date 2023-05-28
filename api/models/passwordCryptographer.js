@@ -1,11 +1,22 @@
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
+/**
+ * Hash "plainPassword" using BCrypt algorithm
+ * @param {String} plainPassword 
+ * @returns Hashed password
+ */
 module.exports.hashPassword = async function (plainPassword) {
   const hashedPassword = await bcrypt.hash(plainPassword, saltRounds)
   return hashedPassword
 }
 
+/**
+ * Check "plainPassword" against "hashedPassword" using BCrypt algorithm
+ * @param {String} plainPassword 
+ * @param {String} hashedPassword 
+ * @returns Match between the provided password as a Boolean
+ */
 module.exports.comparePlainHashed = async function (plainPassword, hashedPassword) {
   let match = false
   try {
