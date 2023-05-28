@@ -1,8 +1,11 @@
 const databaseManager = require('./databaseManager')
 const botManager = require('./botManager')
-// chatbot_rivescript
-// ID, NAME, CONTENT
 
+/**
+ * Create a new RiverScript
+ * @param {name: String, content: String} riveScriptData 
+ * @returns Id of the newly created RiverScript, -1 if creation failed
+ */
 module.exports.createRiveScript = async function (riveScriptData) {
   let newRiveScriptID = -1
   try {
@@ -13,6 +16,12 @@ module.exports.createRiveScript = async function (riveScriptData) {
   return newRiveScriptID
 }
 
+/**
+ * Update RiverScript attributes
+ * @param {Number} id 
+ * @param {Array} riveScriptData 
+ * @returns RiverScript update status success as a Boolean
+ */
 module.exports.updateRiveScript = async function (id, riveScriptData) {
   id = parseInt(id, 10)
   try {
@@ -39,6 +48,10 @@ module.exports.updateRiveScript = async function (id, riveScriptData) {
   }
 }
 
+/**
+ * Get all the RiverScripts
+ * @returns Array of RiverScripts
+ */
 module.exports.getAll = async function () {
   let dbRequest
   try {
@@ -52,6 +65,11 @@ module.exports.getAll = async function () {
   return dbRequest
 }
 
+/**
+ * Get a RiverScript from "id"
+ * @param {Number} id 
+ * @returns RiverScript
+ */
 module.exports.getRiveScript = async function (id) {
   let dbRequest
   try {
@@ -65,6 +83,11 @@ module.exports.getRiveScript = async function (id) {
   return dbRequest
 }
 
+/**
+ * Delete RiverScript with "id"
+ * @param {Number} id 
+ * @returns Deletion success
+ */
 module.exports.deleteRiveScript = async function (id) {
   id = parseInt(id, 10)
   let dbRequest
