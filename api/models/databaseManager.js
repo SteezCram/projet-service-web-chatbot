@@ -1,11 +1,28 @@
+/**
+ * Contains the direct interface to run CRUD operations on the database
+ * The database contains tables related to :
+ * - users
+ * - (chat)bots
+ * - discussion histories
+ * - Rivescripts
+ */
+
+/**
+ * User settings
+ */
+
+const dbPATH = '../database.db'; // Path to the database file
+
+/**
+ * EDIT AT YOUR OWN RISK
+ */
+
 const sqlite3 = require('sqlite3')
 const { open } = require('sqlite')
 
 sqlite3.verbose()
 
 // this is a top-level await
-// TODO: put in a function
-const dbPATH = '../database.db';
 (async () => {
   // open the database
   global.database = await open({
@@ -18,8 +35,16 @@ const dbPATH = '../database.db';
 
 
 
-// chatbot_user
+/**
+ * 
+ * CRUD operation for the table "chatbot_user"
+ */
 
+/**
+ * Get a User with the attribute "email"
+ * @param {String} email 
+ * @returns User with the associated email if referenced in the database, otherwise undefined value
+ */
 module.exports.getUser = async function (email) {
   let result
   try {
@@ -30,6 +55,11 @@ module.exports.getUser = async function (email) {
   return result
 }
 
+/**
+ * Get a Hasher Password with the attribute "email"
+ * @param {String} email 
+ * @returns Hashed password associated to the email if referenced in the database, otherwise undefined value
+ */
 module.exports.getHashedPassword = async function (email) {
   let hashedPassword
   try {
@@ -43,6 +73,11 @@ module.exports.getHashedPassword = async function (email) {
   return hashedPassword
 }
 
+/**
+ * Get the administration status with the attribute "email"
+ * @param {String} email 
+ * @returns Admin status associated to the email if referenced in the database, otherwise undefined value
+ */
 module.exports.getAdminStatus = async function (email) {
   let adminStatus = 0
   try {
@@ -56,6 +91,14 @@ module.exports.getAdminStatus = async function (email) {
   return adminStatus
 }
 
+/**
+ * Create a new User in the database
+ * @param {String} email 
+ * @param {String} hashedPassword 
+ * @param {String} nickname 
+ * @param {String} image 
+ * @returns INSERT query result as a Boolean
+ */
 module.exports.createUserAccount = async function (email, hashedPassword, nickname, image) {
   try {
     await database.run('INSERT INTO chatbot_user (email, password, nickname, image) VALUES (?, ?, ?, ?)', [
@@ -71,6 +114,11 @@ module.exports.createUserAccount = async function (email, hashedPassword, nickna
   }
 }
 
+/**
+ * Delete an User from the database
+ * @param {Number} id 
+ * @returns DELETE query result as a Boolean
+ */
 module.exports.deleteUserAccount = async function (id) {
   try {
     await database.run('DELETE FROM chatbot_user WHERE id = ?', id)
@@ -81,6 +129,13 @@ module.exports.deleteUserAccount = async function (id) {
   }
 }
 
+/**
+ * Update a specific attribute of a given User "id"
+ * @param {Number} id 
+ * @param {String} key 
+ * @param {*} value 
+ * @returns UPDATE query result as a Boolean
+ */
 module.exports.updateUserAccount = async function (id, key, value) {
   try {
     await database.run('UPDATE chatbot_user SET ${key} = ? WHERE id = ?', [
@@ -96,8 +151,15 @@ module.exports.updateUserAccount = async function (id, key, value) {
 
 
 
-// chatbot_bot
+/**
+ * 
+ * CRUD operation for the table "chatbot_user"
+ */
 
+/**
+ * Get all the Bots stored in the database
+ * @returns An array of Bots
+ */
 module.exports.getBots = async function () {
   let result
   try {
@@ -112,6 +174,11 @@ module.exports.getBots = async function () {
   return result
 }
 
+/**
+ * Get a Bot with the attribute "id"
+ * @param {Number} id 
+ * @returns Bot with the associated id if referenced in the database, otherwise undefined
+ */
 module.exports.getBot = async function (id) {
   let result
   try {
@@ -123,6 +190,11 @@ module.exports.getBot = async function (id) {
   return result
 }
 
+/**
+ * Get the Riverscript associated to the bot with the attribute "id"
+ * @param {Number} id 
+ * @returns RiverScript associated with the bot id if referenced in the database, otherwise undefined
+ */
 module.exports.getBotRiveScripts = async function (id) {
   let result
   try {
@@ -134,6 +206,14 @@ module.exports.getBotRiveScripts = async function (id) {
   return result
 }
 
+/**
+ * Create a new Bot in the database
+ * @param {String} name 
+ * @param {String} description 
+ * @param {String} script 
+ * @param {String} image 
+ * @returns INSERT query result as a Boolean
+ */
 module.exports.createBot = async function (name, description, script, image) {
   let res
   try {
@@ -150,6 +230,13 @@ module.exports.createBot = async function (name, description, script, image) {
   return res
 }
 
+/**
+ * Update a specific attribute of a given Bot through "id"
+ * @param {Number} id 
+ * @param {String} key 
+ * @param {*} value 
+ * @returns UPDATE query result as a Boolean
+ */
 module.exports.updateBot = async function (id, key, value) {
   try {
     await database.run(`UPDATE chatbot_bot SET ${key} = ? WHERE id = ?`, [
@@ -163,6 +250,11 @@ module.exports.updateBot = async function (id, key, value) {
   }
 }
 
+/**
+ * Delete a Bot from the database
+ * @param {Number} id 
+ * @returns DELETE query result as a Boolean
+ */
 module.exports.deleteBot = async function (id) {
   try {
     await database.run('DELETE FROM chatbot_bot WHERE id = ?', id)
@@ -175,8 +267,16 @@ module.exports.deleteBot = async function (id) {
 
 
 
-//chatbot_discussion
+/**
+ * 
+ * CRUD operation for the table "chatbot_discussion"
+ */
 
+/**
+ * Get the discussions associated with User of id "user_id"
+ * @param {Number} user_id 
+ * @returns An array of Discussions
+ */
 module.exports.getDiscussions = async function (user_id) {
   let result
   try {
@@ -187,6 +287,12 @@ module.exports.getDiscussions = async function (user_id) {
   return result
 }
 
+/**
+ * Get a Discussion between "user_id" and "bot_id"
+ * @param {Number} user_id 
+ * @param {Number} bot_id 
+ * @returns An (timely-)ordered array of messages between user_id & bot_id, otherwise undefined
+ */
 module.exports.getDiscussion = async function (user_id, bot_id) {
   let result
   try {
@@ -197,6 +303,12 @@ module.exports.getDiscussion = async function (user_id, bot_id) {
   return result
 }
 
+/**
+ * Delete the discussion between "user_id" and "bot_id"
+ * @param {Number} user_id 
+ * @param {Number} bot_id 
+ * @returns DELETE query result as a Boolean
+ */
 module.exports.deleteDiscussion = async function (user_id, bot_id) {
   try {
     await database.run('DELETE FROM chatbot_discussion WHERE user_id = ? AND bot_id = ?', [user_id, bot_id])
@@ -208,6 +320,13 @@ module.exports.deleteDiscussion = async function (user_id, bot_id) {
   }
 }
 
+/**
+ * Insert a new message in the discussion between "user_id" and "bot_id"
+ * @param {Number} user_id 
+ * @param {Number} bot_id 
+ * @param {String} messageData 
+ * @returns INSERT query result as a Boolean
+ */
 module.exports.addMessage = async function (user_id, bot_id, messageData) {
   try {
     await database.run('INSERT INTO chatbot_discussion (user_id, bot_id, is_bot, message, timestamp) VALUES (?, ?, ?, ?, ?)', [
@@ -224,6 +343,12 @@ module.exports.addMessage = async function (user_id, bot_id, messageData) {
   }
 }
 
+/**
+ * Get the variables from the discussion between "user_id" and "bot_id"
+ * @param {Number} user_id 
+ * @param {Number} bot_id 
+ * @returns A map of variables
+ */
 module.exports.getDiscussionVariables = async function (user_id, bot_id) {
   let result
   try {
@@ -238,6 +363,13 @@ module.exports.getDiscussionVariables = async function (user_id, bot_id) {
   return result
 }
 
+/**
+ * Update a variable in the discussion between "user_id" and "bot_id"
+ * @param {Number} user_id 
+ * @param {Number} bot_id 
+ * @param {Map} variables 
+ * @returns INSERT/UPDATE query result as a Boolean
+ */
 module.exports.updateDiscussionVariables = async function (user_id, bot_id, variables) {
   try {
     const hasLine = await database.get('SELECT COUNT(id) as c_id FROM chatbot_discussion_variables WHERE user_id = ? AND bot_id = ?', [user_id, bot_id])
@@ -264,8 +396,15 @@ module.exports.updateDiscussionVariables = async function (user_id, bot_id, vari
 
 
 
-//chatbot_riverscript
+/**
+ * 
+ * CRUD operation for the table "chatbot_riverscript"
+ */
 
+/**
+ * Get all the RiverScripts stored in the database
+ * @returns An array of RiverScripts
+ */
 module.exports.getRiveScripts = async function () {
   let result
   try {
@@ -276,6 +415,11 @@ module.exports.getRiveScripts = async function () {
   return result
 }
 
+/**
+ * Get a RiverScript with the attribute "id"
+ * @param {Number} id 
+ * @returns 
+ */
 module.exports.getRiveScript = async function (id) {
   let result
   try {
@@ -286,6 +430,12 @@ module.exports.getRiveScript = async function (id) {
   return result
 }
 
+/**
+ * Create a new RiverScript in the database
+ * @param {String} name 
+ * @param {String} content 
+ * @returns INSERT query result as a Boolean
+ */
 module.exports.createRiveScript = async function (name, content) {
   let res
   try {
@@ -300,6 +450,13 @@ module.exports.createRiveScript = async function (name, content) {
   return res
 }
 
+/**
+ * Update a specific attribute of a given RiverScript through "id"
+ * @param {Number} id 
+ * @param {String} key 
+ * @param {*} value 
+ * @returns UPDATE query result as a Boolean
+ */
 module.exports.updateRiveScript = async function (id, key, value) {
   try {
     await database.run(`UPDATE chatbot_rivescript SET ${key} = ? WHERE id = ?`, [
@@ -313,6 +470,11 @@ module.exports.updateRiveScript = async function (id, key, value) {
   }
 }
 
+/**
+ * Delete a RiverScript from the database
+ * @param {Number} id 
+ * @returns DELETE query result as a Boolean
+ */
 module.exports.deleteRiveScript = async function (id) {
   try {
     await database.run('DELETE FROM chatbot_rivescript WHERE id = ?', id)
@@ -323,6 +485,11 @@ module.exports.deleteRiveScript = async function (id) {
   }
 }
 
+/**
+ * Get the bots with the RiverScript "id"
+ * @param {Number} id RiverScript identifier 
+ * @returns An array of bots
+ */
 module.exports.getBotsByRiveScript = async function (id) {
   let result
   try {
