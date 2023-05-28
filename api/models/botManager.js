@@ -8,6 +8,11 @@ const riveScriptManager = require('./riveScriptManager')
 
 let rivescriptBots = {}
 
+/**
+ * Create a new bot
+ * @param {name: String, description: String, script: String, image: String} botData 
+ * @returns Id of the newly created bot, -1 if creation failed
+ */
 module.exports.createBot = async function (botData) {
   let newBotID = -1
   try {
@@ -33,6 +38,12 @@ module.exports.createBot = async function (botData) {
   return newBotID
 }
 
+/**
+ * Update a Bot attributes
+ * @param {Number} id 
+ * @param {Array} botData 
+ * @returns Bot update success as a boolean
+ */
 module.exports.updateBot = async function (id, botData) {
   try {
     for (const key in botData) {
@@ -56,6 +67,10 @@ module.exports.updateBot = async function (id, botData) {
   }
 }
 
+/**
+ * Get all the bots
+ * @returns An array of Bots
+ */
 module.exports.getAll = async function () {
   let dbRequest
   try {
@@ -69,6 +84,11 @@ module.exports.getAll = async function () {
   return dbRequest
 }
 
+/**
+ * Get a Bot from "id"
+ * @param {Number} id 
+ * @returns Bot
+ */
 module.exports.getBot = async function (id) {
   let dbRequest
   try {
@@ -82,6 +102,11 @@ module.exports.getBot = async function (id) {
   return dbRequest
 }
 
+/**
+ * Get the RiverScript of Bot with "id"
+ * @param {Number} id 
+ * @returns RiverScript
+ */
 module.exports.getBotRiveScripts = async function (id) {
   let dbRequest
   try {
@@ -95,6 +120,11 @@ module.exports.getBotRiveScripts = async function (id) {
   return dbRequest
 }
 
+/**
+ * Delete a Bot with "id"
+ * @param {Number} id 
+ * @returns Deletion success
+ */
 module.exports.deleteBot = async function (id) {
   let dbRequest
   try {
@@ -108,11 +138,22 @@ module.exports.deleteBot = async function (id) {
   return dbRequest
 }
 
+/**
+ * Get the status of Bot "bot_id"
+ * @param {Number} bot_id 
+ * @returns Running status as a Boolean
+ */
 module.exports.isBotRunning = function (bot_id) {
   if (rivescriptBots[bot_id]) return true
   return false
 }
 
+/**
+ * Allocate the variable value in the discussion between "bot_id" and "user_id"
+ * @param {Number} bot_id 
+ * @param {Number} user_id 
+ * @returns Variable allocation success as a Boolean
+ */
 module.exports.setBotVariables = async function (bot_id, user_id) {
   let bot = rivescriptBots[bot_id]
   if (!bot) {
@@ -132,6 +173,11 @@ module.exports.setBotVariables = async function (bot_id, user_id) {
   return true
 }
 
+/**
+ * Start the bot "bot_id"
+ * @param {Number} bot_id 
+ * @returns Start success as a Boolean
+ */
 module.exports.startBot = async function (bot_id) {
   const botRiveScripts = await this.getBotRiveScripts(bot_id)
   if (!botRiveScripts) {
@@ -149,10 +195,21 @@ module.exports.startBot = async function (bot_id) {
   rivescriptBots[bot_id] = bot
 }
 
+/**
+ * Stop a bot "bot_id"
+ * @param {Number} bot_id 
+ */
 module.exports.stopBot = function (bot_id) {
   delete rivescriptBots[bot_id]
 }
 
+/**
+ * Get a reply from bot "bot_id" after "user_id" sent "message"
+ * @param {Number} bot_id 
+ * @param {Number} user_id 
+ * @param {String} message 
+ * @returns Reply from "bot_id"
+ */
 module.exports.getBotReply = async function (bot_id, user_id, message) {
   let bot = rivescriptBots[bot_id] // bot is already loaded since we call setBotVariables before
 
