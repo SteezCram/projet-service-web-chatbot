@@ -1,3 +1,7 @@
+/**
+ * @namespace api\models\userAccount
+*/
+
 const databaseManager = require('./databaseManager')
 const passwordCryptographer = require('./passwordCryptographer')
 
@@ -7,7 +11,8 @@ const passwordCryptographer = require('./passwordCryptographer')
  * @param {String} plainPassword 
  * @param {String} nickname 
  * @returns Account creation success as a Boolean
- */
+ * @memberof api\models\userAccount
+*/
 module.exports.createAccount = async function (email, plainPassword, nickname) {
 
   // Verify provided email is not in the database
@@ -38,7 +43,8 @@ module.exports.createAccount = async function (email, plainPassword, nickname) {
  * Delete Account with "id"
  * @param {Number} id 
  * @returns Deletion success
- */
+ * @memberof api\models\userAccount
+*/
 module.exports.deleteAccount = async function (id) {
   try {
     const res = await databaseManager.deleteUserAccount(id)
@@ -53,7 +59,8 @@ module.exports.deleteAccount = async function (id) {
  * @param {Number} id 
  * @param {Array} data 
  * @returns Account update success as a Boolean
- */
+ * @memberof api\models\userAccount
+*/
 module.exports.updateAccount = async function (id, data) {
   try {
     for (const key in data) {
@@ -74,7 +81,8 @@ module.exports.updateAccount = async function (id, data) {
  * @param {String} email 
  * @param {String} plainPassword 
  * @returns User if "email" and "plainPassword" matches a User, otherwise an error code, 1 : "email" not found, 2 : wrong "plainPassword"
- */
+ * @memberof api\models\userAccount
+*/
 module.exports.loginAccount = async function (email, plainPassword) {
   try {
     const hashedPassword = await databaseManager.getHashedPassword(email)
@@ -94,7 +102,8 @@ module.exports.loginAccount = async function (email, plainPassword) {
  * Get an User from "email"
  * @param {String} email 
  * @returns User
- */
+ * @memberof api\models\userAccount
+*/
 module.exports.getUser = async function (email) {
   try {
     const user = await databaseManager.getUser(email)
@@ -108,7 +117,8 @@ module.exports.getUser = async function (email) {
  * Get the administration status of User with "email"
  * @param {String} email 
  * @returns Administration status as a Boolean
- */
+ * @memberof api\models\userAccount
+*/
 module.exports.isAdmin = async function (email) {
   try {
     const isAdmin = await databaseManager.getAdminStatus(email)

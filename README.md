@@ -1,4 +1,7 @@
 # Projet Chatbot
+Auteurs :
+* Thomas Croizet
+* Victor Dang
 
 Bienvenue dans le projet Chatbot ! Ce service web vous permet de gérer et d'utiliser des chatbots en utilisant la puissante technologie RiveScript. Le projet est composé de deux dossiers : "api" et "website". Le dossier "api" contient l'API du site, écrit en Node.js, tandis que le dossier "website" contient le site web développé avec Nuxt.js.
 
