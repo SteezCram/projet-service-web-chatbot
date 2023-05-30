@@ -96,7 +96,7 @@ app.delete('/users/:id', async (req, res) => {
       if (goodDeletion) {
         res.sendStatus(200)
       } else {
-        res.sendStatus(409)
+        res.sendStatus(404)
       }
     } catch (err) {
       console.log(`Error ${err} thrown`)
@@ -137,7 +137,7 @@ app.get('/bots/:id', async (req, res) => {
     if (bot) {
       res.status(200).send(bot)
     } else {
-      res.sendStatus(409)
+      res.sendStatus(404)
     }
   } catch (err) {
     console.log(`Error ${err} thrown`)
@@ -151,7 +151,7 @@ app.get('/bots', async (req, res) => {
     if (bots) {
       res.status(200).send(bots)
     } else {
-      res.sendStatus(409)
+      res.sendStatus(404)
     }
   } catch (err) {
     console.log(`Error ${err} thrown`)
@@ -209,7 +209,7 @@ app.delete('/bots/:id', async (req, res) => {
       if (goodDeletion) {
         res.sendStatus(200)
       } else {
-        res.sendStatus(409)
+        res.sendStatus(404)
       }
     } catch (err) {
       console.log(`Error ${err} thrown`)
@@ -233,7 +233,7 @@ app.get('/discussions/:user_id', async (req, res) => {
     if (discussions) {
       res.status(200).send(discussions)
     } else {
-      res.sendStatus(409)
+      res.sendStatus(404)
     }
   } catch (err) {
     console.log(`Error ${err} thrown`)
@@ -252,7 +252,7 @@ app.get('/discussions/:user_id/:bot_id', async (req, res) => {
       botManager.setBotVariables(bot_id, user_id);
       res.status(200).send(discussion)
     } else {
-      res.sendStatus(409)
+      res.sendStatus(404)
     }
   } catch (err) {
     console.log(`Error ${err} thrown`)
@@ -284,7 +284,7 @@ app.delete('/discussions/:user_id/:bot_id', async (req, res) => {
     if (goodDeletion) {
       res.sendStatus(200)
     } else {
-      res.sendStatus(409)
+      res.sendStatus(404)
     }
   } catch (err) {
     console.log(`Error ${err} thrown`)
