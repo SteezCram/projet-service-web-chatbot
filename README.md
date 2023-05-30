@@ -35,6 +35,14 @@ cd ../website
 npm install
 ```
 
+### Documentation développeur
+Pour générer la documentation développeur, exécutez la commande suivante dans le dossier "api" :
+```shell
+npm run jsdoc
+```
+
+La documentation développeur sera générée dans le dossier "api/docs".
+
 ### Lancement du projet
 
 Pour lancer le projet Chatbot sur votre machine locale, suivez ces étapes :
