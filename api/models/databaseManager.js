@@ -20,7 +20,7 @@ const dbPATH = '../database.db'; // Path to the database file
 const sqlite3 = require('sqlite3')
 const { open } = require('sqlite')
 
-sqlite3.verbose()
+sqlite3.verbose();
 
 // this is a top-level await
 (async () => {
