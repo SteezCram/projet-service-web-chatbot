@@ -233,13 +233,13 @@ module.exports.getBotRiveScripts = async function (id) {
  * @returns INSERT query result as a Boolean
  * @memberof api\models\databaseManager
 */
-module.exports.createBot = async function (name, description, script, image) {
+module.exports.createBot = async function (name, description, rivescripts, image) {
   let res
   try {
-    const result = await database.run('INSERT INTO chatbot_bot (name, description, script, image) VALUES (?, ?, ?, ?)', [
+    const result = await database.run('INSERT INTO chatbot_bot (name, description, rivescripts, image) VALUES (?, ?, ?, ?)', [
       name,
       description,
-      script,
+      rivescripts,
       image
     ])
     res = result.lastID

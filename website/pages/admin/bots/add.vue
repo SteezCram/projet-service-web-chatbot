@@ -31,7 +31,7 @@
                 </div>
             </article>
 
-            <rivescript-manager for-bot ref="rivescriptManager" class="mt-5"></rivescript-manager>
+            <rivescript-manager for-bot ref="rivescriptManager" @update:rivescripts="updateRivescripts($event)" class="mt-5"></rivescript-manager>
 
             <btn-primary ref="submitButton" class="mt-10 !w-auto">
                 <i class="icon icon-logout"></i>
@@ -61,7 +61,6 @@ export default {
                 name: '',
                 description: '',
                 image: '',
-                script: '',
                 rivescripts: [],
             }
         }
@@ -87,12 +86,12 @@ export default {
 
         async addBot()
         {
-            if (this.bot.name.length === 0 || this.bot.description.length === 0 || this.bot.script.length === 0) {
+            if (this.bot.name.length === 0 || this.bot.description.length === 0 || this.bot.rivescripts.length === 0) {
                 alert('Veuillez remplir tous les champs.');
                 return;
             }
 
-            this.bot.rivescripts = this.$refs.rivescriptManager.rivescriptsChecked;
+            console.log(this.bot.rivescripts);
 
             this.$refs.submitButton.disabled = true;
 
@@ -112,6 +111,11 @@ export default {
             }
 
             this.$router.push('/admin');
+        },
+
+        updateRivescripts(rivescripts)
+        {
+            this.bot.rivescripts = rivescripts;
         }
     }
 }

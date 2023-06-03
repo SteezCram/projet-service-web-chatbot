@@ -25,7 +25,7 @@ module.exports.createBot = async function (botData) {
       botName = botData.name
     }
     const botDescription = botData.description
-    const botScript = botData.script
+    const botRivescripts = botData.rivescripts
     let botImage = botData.image
     if (!botImage) {
       const response = await fetch(`https://api.dicebear.com/6.x/bottts-neutral/svg?seed=${botName}`);
@@ -35,7 +35,7 @@ module.exports.createBot = async function (botData) {
       }
     }
 
-    newBotID = await databaseManager.createBot(botName, botDescription, botScript, botImage)
+    newBotID = await databaseManager.createBot(botName, botDescription, JSON.stringify(botRivescripts), botImage)
   } catch (err) {
     console.error(err)
   }

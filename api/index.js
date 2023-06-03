@@ -164,7 +164,7 @@ app.post('/bots', async (req, res) => {
     const botData = {
       name: req.body.name,
       description: req.body.description,
-      script: req.body.script,
+      rivescripts: req.body.rivescripts,
       image: req.body.image
     }
     newBotId = await botManager.createBot(botData)
