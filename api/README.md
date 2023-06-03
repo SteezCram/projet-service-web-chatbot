@@ -1,10 +1,10 @@
 # API du projet chatbot
 
-L'API implémentée est de type REST et permet les opérations CRUD accessible par **POST**, **GET**, **PUT**, **DELETE**.
+L'API implémentée est de type REST et permet les opérations CRUD accessibles par **POST**, **GET**, **PUT**, **DELETE**.
 
 ## Ressources
 
-Les ressources manipulées à travers l'API mis en place sont :
+Les ressources manipulées à travers l'API sont :
 
 - *bot* : robot avec laquelle une discussion est possible pourvu qu'au moins un cerveau (fichier RiverScript) lui est associé
 - *user* : compte utilisateur
